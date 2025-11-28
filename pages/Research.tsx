@@ -1,21 +1,18 @@
 import React from 'react';
 import { RESEARCH_PROJECTS } from '../constants';
-import { FlaskConical, Microscope, FileText } from 'lucide-react';
+import { FlaskConical, Microscope, FileText, ArrowRight } from 'lucide-react';
+import Hero from '../components/Hero';
 
 const Research: React.FC = () => {
   return (
     <div className="min-h-screen bg-white">
-      {/* Header */}
-      <div className="bg-gray-900 text-white py-20 relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-64 h-64 bg-secondary rounded-full mix-blend-multiply filter blur-3xl opacity-20 transform translate-x-1/2 -translate-y-1/2"></div>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <span className="text-secondary font-bold tracking-widest uppercase text-sm mb-2 block">Innovation</span>
-          <h1 className="text-4xl md:text-5xl font-serif font-bold mb-6">Research & Development</h1>
-          <p className="text-gray-300 text-lg max-w-2xl">
-            Exploring new frontiers in technology to solve real-world problems. Our labs are hubs of creativity and discovery.
-          </p>
-        </div>
-      </div>
+      <Hero
+        title="Research & Innovation"
+        subtitle="Exploring new frontiers in technology to solve real-world problems. Our labs are hubs of creativity and discovery."
+        image="https://picsum.photos/1920/600?random=88"
+        breadcrumbs={[{ label: 'Research' }]}
+        parentSection="Innovation"
+      />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         
@@ -26,38 +23,64 @@ const Research: React.FC = () => {
             { icon: <Microscope size={32} />, title: "AI & Data Science", desc: "Machine learning applications for local languages and healthcare." },
             { icon: <FileText size={32} />, title: "Power & Energy", desc: "Renewable energy integration and smart grid technologies." }
           ].map((area, idx) => (
-            <div key={idx} className="bg-gray-50 p-8 rounded-xl border border-gray-100 hover:shadow-md transition-shadow">
-               <div className="w-14 h-14 bg-white rounded-lg shadow-sm flex items-center justify-center text-primary mb-6">
+            <div key={idx} className="bg-white p-8 rounded-xl border border-gray-100 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+               <div className="w-16 h-16 bg-blue-50 rounded-2xl flex items-center justify-center text-primary mb-6">
                  {area.icon}
                </div>
-               <h3 className="text-xl font-bold text-gray-900 mb-3">{area.title}</h3>
-               <p className="text-gray-600">{area.desc}</p>
+               <h3 className="text-xl font-bold font-serif text-gray-900 mb-3">{area.title}</h3>
+               <p className="text-gray-600 leading-relaxed">{area.desc}</p>
+               <a href="#" className="inline-flex items-center text-sm font-bold text-primary mt-4 hover:text-secondary">
+                  Learn more <ArrowRight size={14} className="ml-1" />
+               </a>
             </div>
           ))}
         </div>
 
         {/* Projects List */}
-        <h2 className="text-2xl font-serif font-bold text-gray-900 mb-10 border-l-4 border-secondary pl-4">Featured Projects</h2>
+        <div className="flex items-center gap-4 mb-10">
+           <h2 className="text-3xl font-serif font-bold text-gray-900">Featured Projects</h2>
+           <div className="h-px bg-gray-200 flex-grow"></div>
+        </div>
+        
         <div className="space-y-12">
           {RESEARCH_PROJECTS.map((project) => (
-            <div key={project.id} className="flex flex-col md:flex-row gap-8 items-center bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-lg transition-all">
-              <div className="md:w-1/2 h-64 md:h-80 w-full">
-                <img src={project.image} alt={project.title} className="w-full h-full object-cover" />
+            <div key={project.id} className="flex flex-col md:flex-row group bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-xl transition-all duration-300">
+              <div className="md:w-2/5 h-64 md:h-auto overflow-hidden">
+                <img 
+                  src={project.image} 
+                  alt={project.title} 
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" 
+                />
               </div>
-              <div className="md:w-1/2 p-8">
-                <div className={`inline-block px-3 py-1 rounded-full text-xs font-bold mb-4 ${
-                  project.status === 'Ongoing' ? 'bg-green-100 text-green-700' : 'bg-blue-100 text-blue-700'
-                }`}>
-                  {project.status}
+              <div className="md:w-3/5 p-8 md:p-10 flex flex-col justify-center">
+                <div className="flex justify-between items-start mb-4">
+                  <div className={`inline-block px-3 py-1 rounded-full text-xs font-bold tracking-wide uppercase ${
+                    project.status === 'Ongoing' ? 'bg-green-100 text-green-700' : 'bg-blue-100 text-blue-700'
+                  }`}>
+                    {project.status}
+                  </div>
                 </div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-4">{project.title}</h3>
-                <p className="text-gray-600 mb-6 leading-relaxed">
+                
+                <h3 className="text-2xl font-bold font-serif text-gray-900 mb-4 group-hover:text-primary transition-colors">
+                  {project.title}
+                </h3>
+                <p className="text-gray-600 mb-8 leading-relaxed text-lg">
                   {project.description}
                 </p>
-                <div className="flex items-center gap-4 text-sm text-gray-500">
-                   <div className="flex items-center gap-2">
-                     <span className="font-semibold text-gray-900">Lead:</span> {project.lead}
+                
+                <div className="flex items-center justify-between border-t border-gray-100 pt-6">
+                   <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-full bg-gray-200 overflow-hidden">
+                        <img src={`https://ui-avatars.com/api/?name=${project.lead}&background=random`} alt={project.lead} />
+                      </div>
+                      <div>
+                        <p className="text-xs text-gray-500 uppercase font-bold">Principal Investigator</p>
+                        <p className="text-sm font-medium text-gray-900">{project.lead}</p>
+                      </div>
                    </div>
+                   <button className="text-primary font-bold text-sm flex items-center hover:text-secondary transition-colors">
+                     View Case Study <ArrowRight size={16} className="ml-1" />
+                   </button>
                 </div>
               </div>
             </div>

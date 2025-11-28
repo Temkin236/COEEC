@@ -1,3 +1,4 @@
+
 import { NavItem, NewsItem, Department, StaffMember, ResearchProject } from './types';
 
 export const NAV_ITEMS: NavItem[] = [
@@ -96,38 +97,100 @@ export const STAFF_MEMBERS: StaffMember[] = [
   {
     id: 1,
     name: "Dr. Berhanu Bulcha",
+    title: "PhD in Computer Engineering",
     role: "Dean of COEEC",
+    academicRank: "Professor",
     department: "Computer Science & Engineering",
-    researchAreas: ["Machine Learning", "Educational Technology"],
     email: "dean.coeec@astu.edu.et",
-    image: "https://picsum.photos/300/300?random=7"
+    phone: "+251-911-234-567",
+    office: "B-201, COEEC Main Building",
+    image: "https://picsum.photos/300/300?random=7",
+    bio: "Dr. Berhanu Bulcha is a distinguished scholar with over 20 years of experience in higher education and research. He has led numerous national projects on digital literacy and infrastructure. His vision for COEEC is to become a leading hub for technological innovation in East Africa.",
+    resumeUrl: "#",
+    socialLinks: {
+      linkedin: "https://linkedin.com",
+      googleScholar: "https://scholar.google.com"
+    },
+    researchAreas: ["Machine Learning", "Educational Technology", "Cloud Computing"],
+    education: [
+       { degree: "PhD in Computer Engineering", institution: "Technical University of Munich", year: "2010" },
+       { degree: "MSc in Electrical Engineering", institution: "Addis Ababa University", year: "2004" }
+    ],
+    experience: [
+       { role: "Dean", organization: "COEEC - ASTU", period: "2018 - Present", description: "Leading the college's strategic direction and academic operations." },
+       { role: "Department Head", organization: "ASTU", period: "2014 - 2018", description: "Managed the Computer Science department curriculum and staff." }
+    ],
+    publications: [
+       { title: "AI-Driven Adaptive Learning Systems for Rural Education", journal: "Journal of Educational Computing", year: "2023" },
+       { title: "Cloud Infrastructure Challenges in Developing Nations", journal: "IEEE Access", year: "2021" }
+    ],
+    events: [
+       { title: "National Digital Transformation Summit", date: "Nov 20, 2025", role: "Speaker", description: "Keynote speech on the future of engineering education." }
+    ]
   },
   {
     id: 2,
     name: "Dr. Fikadu Tafesse",
+    title: "PhD in Power Systems",
     role: "Associate Professor",
+    academicRank: "Associate Professor",
     department: "Electronics & Power Engineering",
-    researchAreas: ["Renewable Energy", "Smart Grids"],
     email: "fikadu.t@astu.edu.et",
-    image: "https://picsum.photos/300/300?random=8"
+    image: "https://picsum.photos/300/300?random=8",
+    bio: "Dr. Fikadu is passionate about renewable energy solutions for rural electrification. He leads the Green Energy Lab at ASTU.",
+    researchAreas: ["Renewable Energy", "Smart Grids", "Power Electronics"],
+    education: [
+       { degree: "PhD in Power Engineering", institution: "IIT Bombay", year: "2012" }
+    ],
+    experience: [
+       { role: "Associate Professor", organization: "ASTU", period: "2015 - Present", description: "Teaching advanced power system analysis and conducting research." }
+    ],
+    publications: [
+       { title: "Optimization of Microgrids in Off-Grid Communities", journal: "Renewable Energy Journal", year: "2022" }
+    ],
+    events: [
+       { title: "Green Energy Workshop", date: "Oct 15, 2025", role: "Organizer", description: "Hands-on workshop for solar panel installation." }
+    ]
   },
   {
     id: 3,
     name: "Ms. Tigist Alemu",
-    role: "Lecturer",
+    title: "MSc in Network Security",
+    role: "Lecturer & Researcher",
+    academicRank: "Lecturer",
     department: "Computer Science & Engineering",
-    researchAreas: ["Cybersecurity", "Network Protocols"],
     email: "tigist.a@astu.edu.et",
-    image: "https://picsum.photos/300/300?random=9"
+    image: "https://picsum.photos/300/300?random=9",
+    bio: "Ms. Tigist specializes in network security protocols and cybersecurity awareness. She mentors the university's competitive hacking team.",
+    researchAreas: ["Cybersecurity", "Network Protocols", "IoT Security"],
+    education: [
+       { degree: "MSc in Network Engineering", institution: "ASTU", year: "2016" }
+    ],
+    experience: [
+       { role: "Lecturer", organization: "ASTU", period: "2017 - Present", description: "Teaching Network Security and Cryptography." }
+    ],
+    publications: [],
+    events: []
   },
   {
     id: 4,
     name: "Mr. Henok Assefa",
+    title: "MSc in Software Engineering",
     role: "Project Manager",
+    academicRank: "Administrator",
     department: "Administration",
-    researchAreas: ["Project Management", "Software Architecture"],
     email: "henok.assefa@astu.edu.et",
-    image: "https://picsum.photos/300/300?random=10"
+    image: "https://picsum.photos/300/300?random=10",
+    bio: "Mr. Henok oversees the college's digital infrastructure projects and industry partnerships. He brings 10 years of industry experience.",
+    researchAreas: ["Project Management", "Software Architecture"],
+    education: [
+       { degree: "MSc in Software Engineering", institution: "Hilcoe", year: "2014" }
+    ],
+    experience: [
+       { role: "Project Manager", organization: "COEEC", period: "2019 - Present", description: "Managing industry-linkage projects." }
+    ],
+    publications: [],
+    events: []
   }
 ];
 

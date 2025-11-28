@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { HashRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Layout from './components/Layout';
@@ -7,16 +8,13 @@ import About from './pages/About';
 import Departments from './pages/Departments';
 import DepartmentDetail from './pages/DepartmentDetail';
 import Staff from './pages/Staff';
+import StaffProfile from './pages/StaffProfile';
 import Research from './pages/Research';
 import Contact from './pages/Contact';
-
-// Mock component for Academics to avoid empty route error
-const Academics = () => (
-  <div className="py-20 text-center">
-    <h1 className="text-3xl font-bold text-gray-800">Academic Programs</h1>
-    <p className="text-gray-600 mt-4">Curriculum details and calendar coming soon.</p>
-  </div>
-);
+import Academics from './pages/Academics';
+import Students from './pages/Students';
+import News from './pages/News';
+import Downloads from './pages/Downloads';
 
 function App() {
   return (
@@ -28,8 +26,12 @@ function App() {
           <Route path="/departments" element={<Departments />} />
           <Route path="/departments/:id" element={<DepartmentDetail />} />
           <Route path="/staff" element={<Staff />} />
+          <Route path="/staff/:id" element={<StaffProfile />} />
           <Route path="/research" element={<Research />} />
           <Route path="/academics" element={<Academics />} />
+          <Route path="/students" element={<Students />} />
+          <Route path="/news" element={<News />} />
+          <Route path="/downloads" element={<Downloads />} />
           <Route path="/contact" element={<Contact />} />
           {/* Fallback route */}
           <Route path="*" element={<Navigate to="/" replace />} />

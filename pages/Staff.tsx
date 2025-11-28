@@ -1,87 +1,166 @@
+
 import React, { useState } from 'react';
 import { STAFF_MEMBERS } from '../constants';
-import { Search, Mail, BookOpen } from 'lucide-react';
+import Hero from '../components/Hero';
+import { Search, Mail, BookOpen, User, ArrowRight, Briefcase, GraduationCap } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const Staff: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
+  const [filterDept, setFilterDept] = useState('All');
+  const [filterRank, setFilterRank] = useState('All');
 
-  const filteredStaff = STAFF_MEMBERS.filter(staff => 
-    staff.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    staff.department.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    staff.researchAreas.some(area => area.toLowerCase().includes(searchTerm.toLowerCase()))
-  );
+  const departments = ['All', ...Array.from(new Set(STAFF_MEMBERS.map(s => s.department)))];
+  const ranks = ['All', 'Professor', 'Associate Professor', 'Assistant Professor', 'Lecturer', 'Administrator'];
+
+  const filteredStaff = STAFF_MEMBERS.filter(staff => {
+    const matchesSearch = staff.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
+                          staff.role.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                          staff.researchAreas.some(area => area.toLowerCase().includes(searchTerm.toLowerCase()));
+    const matchesDept = filterDept === 'All' || staff.department === filterDept;
+    const matchesRank = filterRank === 'All' || staff.academicRank === filterRank;
+    return matchesSearch && matchesDept && matchesRank;
+  });
 
   return (
     <div className="bg-white min-h-screen">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="text-center mb-12">
-          <h1 className="text-3xl font-serif font-bold text-gray-900 mb-4">Faculty & Staff Directory</h1>
-          <p className="text-gray-600 max-w-2xl mx-auto">
-            Meet the dedicated professors, researchers, and administrative staff powering COEEC.
-          </p>
-        </div>
+      <Hero 
+        title="Faculty & Staff Directory" 
+        subtitle="Meet the world-class educators, researchers, and administrators driving excellence at COEEC."
+        image="https://picsum.photos/1920/600?random=15"
+        breadcrumbs={[{ label: 'About', path: '/about' }, { label: 'Staff' }]}
+        parentSection="Our People"
+      />
 
-        {/* Search Bar */}
-        <div className="max-w-xl mx-auto mb-16 relative">
-          <input 
-            type="text" 
-            placeholder="Search by name, department, or research area..."
-            className="w-full pl-12 pr-4 py-3 rounded-full border border-gray-300 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none shadow-sm transition-all"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-          <Search className="absolute left-4 top-3.5 text-gray-400" size={20} />
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        
+        {/* Advanced Filter Bar */}
+        <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm mb-12">
+           <div className="flex flex-col lg:flex-row gap-6 items-center">
+              
+              {/* Search */}
+              <div className="relative w-full lg:w-96 flex-shrink-0">
+                 <input 
+                   type="text" 
+                   placeholder="Search by name, role, or expertise..." 
+                   value={searchTerm}
+                   onChange={(e) => setSearchTerm(e.target.value)}
+                   className="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all text-sm font-medium"
+                 />
+                 <Search className="absolute left-3 top-3.5 text-gray-400" size={18} />
+              </div>
+
+              {/* Dropdowns */}
+              <div className="flex flex-col sm:flex-row gap-4 w-full">
+                 <div className="relative w-full">
+                    <span className="absolute -top-2 left-2 bg-white px-1 text-xs font-bold text-gray-500">Department</span>
+                    <select 
+                      value={filterDept}
+                      onChange={(e) => setFilterDept(e.target.value)}
+                      className="w-full px-4 py-3 border border-gray-200 rounded-lg bg-white focus:outline-none focus:border-primary cursor-pointer text-sm text-gray-700"
+                    >
+                      {departments.map(dept => (
+                        <option key={dept} value={dept}>{dept}</option>
+                      ))}
+                    </select>
+                 </div>
+
+                 <div className="relative w-full">
+                    <span className="absolute -top-2 left-2 bg-white px-1 text-xs font-bold text-gray-500">Academic Rank</span>
+                    <select 
+                      value={filterRank}
+                      onChange={(e) => setFilterRank(e.target.value)}
+                      className="w-full px-4 py-3 border border-gray-200 rounded-lg bg-white focus:outline-none focus:border-primary cursor-pointer text-sm text-gray-700"
+                    >
+                      {ranks.map(rank => (
+                        <option key={rank} value={rank}>{rank}</option>
+                      ))}
+                    </select>
+                 </div>
+              </div>
+              
+              <div className="hidden lg:block h-10 w-px bg-gray-200"></div>
+
+              <div className="text-sm text-gray-500 whitespace-nowrap">
+                 Showing <strong>{filteredStaff.length}</strong> results
+              </div>
+           </div>
         </div>
 
         {/* Staff Grid */}
-        {filteredStaff.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {filteredStaff.map(member => (
-              <div key={member.id} className="group bg-white rounded-lg border border-gray-200 overflow-hidden hover:shadow-lg hover:border-primary/30 transition-all duration-300">
-                <div className="h-64 overflow-hidden relative">
-                   <img 
-                    src={member.image} 
-                    alt={member.name} 
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                   />
-                   <div className="absolute inset-0 bg-gradient-to-t from-primary/90 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center p-4">
-                      <a href={`mailto:${member.email}`} className="text-white bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full text-sm font-medium hover:bg-white hover:text-primary transition-colors">
-                        View Profile
-                      </a>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          {filteredStaff.length > 0 ? (
+            filteredStaff.map((staff) => (
+              <div key={staff.id} className="group flex flex-col bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden">
+                {/* Image Section */}
+                <div className="h-64 overflow-hidden relative bg-gray-100">
+                   {staff.image ? (
+                     <img src={staff.image} alt={staff.name} className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500 group-hover:scale-105" />
+                   ) : (
+                     <div className="w-full h-full flex items-center justify-center text-gray-300">
+                        <User size={64} />
+                     </div>
+                   )}
+                   <div className="absolute inset-0 bg-gradient-to-t from-primary/90 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6">
+                      <Link to={`/staff/${staff.id}`} className="bg-white text-primary font-bold py-2 px-4 rounded-full text-sm text-center shadow-lg hover:bg-secondary hover:text-primary transition-colors flex items-center justify-center gap-2">
+                         View Full Profile <ArrowRight size={14} />
+                      </Link>
                    </div>
                 </div>
-                <div className="p-6">
-                  <h3 className="text-lg font-bold text-gray-900 mb-1">{member.name}</h3>
-                  <p className="text-sm text-primary font-medium mb-3">{member.role}</p>
-                  <p className="text-xs text-gray-500 mb-4 uppercase tracking-wide border-b border-gray-100 pb-3">
-                    {member.department}
-                  </p>
-                  
-                  <div className="space-y-2">
-                    <div className="flex items-start gap-2 text-xs text-gray-600">
-                       <BookOpen size={14} className="mt-0.5 text-secondary shrink-0" />
-                       <span>{member.researchAreas.join(', ')}</span>
-                    </div>
-                    <div className="flex items-center gap-2 text-xs text-gray-600">
-                       <Mail size={14} className="text-secondary shrink-0" />
-                       <span className="truncate">{member.email}</span>
-                    </div>
+
+                {/* Content Section */}
+                <div className="p-6 flex flex-col flex-grow">
+                  <div className="mb-4">
+                     <p className="text-xs font-bold text-primary uppercase tracking-wide mb-1">{staff.academicRank}</p>
+                     <h3 className="text-lg font-serif font-bold text-gray-900 group-hover:text-primary transition-colors leading-tight">
+                       <Link to={`/staff/${staff.id}`}>{staff.name}</Link>
+                     </h3>
+                     <p className="text-sm text-gray-500 mt-1">{staff.title}</p>
                   </div>
+
+                  <div className="space-y-3 mb-6">
+                     <div className="flex items-start gap-2 text-xs text-gray-600">
+                        <Briefcase size={14} className="mt-0.5 text-gray-400" />
+                        <span>{staff.role}</span>
+                     </div>
+                     <div className="flex items-start gap-2 text-xs text-gray-600">
+                        <GraduationCap size={14} className="mt-0.5 text-gray-400" />
+                        <span>{staff.department}</span>
+                     </div>
+                  </div>
+
+                  {staff.researchAreas.length > 0 && (
+                     <div className="mt-auto pt-4 border-t border-gray-100">
+                        <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-2">Expertise</p>
+                        <div className="flex flex-wrap gap-1">
+                           {staff.researchAreas.slice(0, 2).map((area, idx) => (
+                              <span key={idx} className="bg-blue-50 text-blue-700 text-[10px] px-2 py-1 rounded-md font-medium">
+                                 {area}
+                              </span>
+                           ))}
+                           {staff.researchAreas.length > 2 && (
+                              <span className="text-[10px] text-gray-400 py-1 pl-1">+ {staff.researchAreas.length - 2} more</span>
+                           )}
+                        </div>
+                     </div>
+                  )}
                 </div>
               </div>
-            ))}
-          </div>
-        ) : (
-          <div className="text-center py-20 text-gray-500 bg-gray-50 rounded-lg">
-             <p className="text-lg">No staff members found matching your search.</p>
-             <button 
-              onClick={() => setSearchTerm('')}
-              className="mt-4 text-primary font-semibold hover:underline"
-             >
-               Clear filters
-             </button>
-          </div>
-        )}
+            ))
+          ) : (
+            <div className="col-span-full py-20 text-center text-gray-500 bg-gray-50 rounded-2xl border border-dashed border-gray-300">
+               <User size={48} className="mx-auto mb-4 text-gray-300" />
+               <p className="text-lg font-medium text-gray-900">No staff members found.</p>
+               <p className="text-sm">Try adjusting your filters or search terms.</p>
+               <button 
+                  onClick={() => {setSearchTerm(''); setFilterDept('All'); setFilterRank('All');}}
+                  className="mt-4 text-primary font-bold text-sm hover:underline"
+               >
+                  Clear all filters
+               </button>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

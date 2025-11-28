@@ -1,3 +1,4 @@
+
 export interface NavItem {
   label: string;
   path: string;
@@ -21,14 +22,56 @@ export interface Department {
   programs: string[];
 }
 
+export interface Education {
+  degree: string;
+  institution: string;
+  year: string;
+}
+
+export interface Experience {
+  role: string;
+  organization: string;
+  period: string;
+  description: string;
+}
+
+export interface Publication {
+  title: string;
+  journal: string;
+  year: string;
+  link?: string;
+}
+
+export interface Event {
+  title: string;
+  date: string;
+  role: 'Speaker' | 'Organizer' | 'Attendee';
+  description: string;
+}
+
 export interface StaffMember {
   id: number;
   name: string;
-  role: string;
+  title: string; // e.g. PhD, MSc
+  role: string; // e.g. Dean, Associate Professor
+  academicRank: 'Professor' | 'Associate Professor' | 'Assistant Professor' | 'Lecturer' | 'Administrator';
   department: string;
-  researchAreas: string[];
+  bio: string;
   email: string;
+  phone?: string;
+  office?: string;
   image: string;
+  resumeUrl?: string;
+  socialLinks?: {
+    linkedin?: string;
+    twitter?: string;
+    googleScholar?: string;
+  };
+  researchAreas: string[];
+  education: Education[];
+  experience: Experience[];
+  publications: Publication[];
+  events: Event[];
 }
 
 export interface ResearchProject {
