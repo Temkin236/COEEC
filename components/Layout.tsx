@@ -55,9 +55,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
           <div className="flex justify-between items-center h-24">
             {/* Logo Area */}
             <Link to="/" className="flex-shrink-0 flex items-center gap-4 group">
-              <div className="bg-primary text-white p-2.5 rounded-lg shadow-md group-hover:bg-secondary group-hover:text-primary transition-colors">
-                <GraduationCap className="h-8 w-8" />
-              </div>
+              <img src="/astu-logo.jpg" alt="Flag" className="h-12 w-auto"/>
               <div className="flex flex-col">
                 <span className="font-bold text-2xl leading-none text-primary font-serif tracking-tight">COEEC</span>
                 <span className="text-xs text-gray-500 font-medium tracking-widest uppercase mt-1">College of Electrical Engineering</span>
