@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { ArrowRight, Calendar, ArrowUpRight, PlusCircle, Clock, ChevronRight, ChevronLeft } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -42,26 +43,14 @@ const Home: React.FC = () => {
               COEEC provides an exceptional educational experience that prepares students for successful completion, employability, and job creation in the digital age.
             </p>
             <div className="flex flex-wrap gap-4">
-              <a href="#" className="bg-white text-primary font-bold px-8 py-3.5 rounded hover:bg-secondary hover:text-primary transition-colors flex items-center gap-2">
+              <Link to="/contact" className="bg-white text-primary font-bold px-8 py-3.5 rounded hover:bg-secondary hover:text-primary transition-colors flex items-center gap-2">
                 Portal <ArrowUpRight size={18} />
-              </a>
+              </Link>
               <Link to="/departments" className="border border-white text-white font-bold px-8 py-3.5 rounded hover:bg-white hover:text-primary transition-colors flex items-center gap-2">
                 Study at COEEC <ArrowUpRight size={18} />
               </Link>
             </div>
           </div>
-        </div>
-
-        {/* Carousel Indicators (Mock) */}
-        <div className="absolute bottom-8 right-8 z-20 flex gap-2 text-white">
-           <button className="hover:text-secondary"><ChevronLeft size={32}/></button>
-           <div className="flex gap-2 items-center">
-             <div className="w-2.5 h-2.5 bg-white rounded-full"></div>
-             <div className="w-2.5 h-2.5 bg-white/50 rounded-full"></div>
-             <div className="w-2.5 h-2.5 bg-white/50 rounded-full"></div>
-             <div className="w-2.5 h-2.5 bg-white/50 rounded-full"></div>
-           </div>
-           <button className="hover:text-secondary"><ChevronRight size={32}/></button>
         </div>
       </section>
 
@@ -90,9 +79,9 @@ const Home: React.FC = () => {
                 <p className={`text-xs leading-relaxed ${index === 0 ? 'text-blue-200' : 'text-gray-500'}`}>{stat.description}</p>
                 
                 {index === 0 && (
-                  <button className="mt-6 w-full bg-white text-primary font-bold py-2 rounded text-sm hover:bg-secondary transition-colors flex items-center justify-center gap-1">
+                  <Link to="/students" className="mt-6 w-full bg-white text-primary font-bold py-2 rounded text-sm hover:bg-secondary transition-colors flex items-center justify-center gap-1">
                     View List <ArrowUpRight size={14} />
-                  </button>
+                  </Link>
                 )}
               </div>
             ))}
@@ -109,9 +98,9 @@ const Home: React.FC = () => {
              </div>
              <div className="flex flex-wrap justify-center md:justify-start flex-1">
                {QUICK_LINKS.map((link, idx) => (
-                 <a key={idx} href={link.url} className="px-6 py-5 text-xs font-bold hover:bg-secondary hover:text-primary transition-colors border-r border-gray-700 last:border-r-0 flex items-center gap-2">
+                 <Link key={idx} to={link.url.startsWith('#') ? '#' : link.url} className="px-6 py-5 text-xs font-bold hover:bg-secondary hover:text-primary transition-colors border-r border-gray-700 last:border-r-0 flex items-center gap-2">
                    {link.label} <ArrowUpRight size={12} className="opacity-50" />
-                 </a>
+                 </Link>
                ))}
              </div>
           </div>
@@ -130,9 +119,9 @@ const Home: React.FC = () => {
             <p className="text-gray-600 text-sm leading-relaxed mb-6">
               Our students engage in events, activities, and clubs year-round across all campuses. From holiday celebrations to club involvement and voluntary work, we offer plenty of opportunities to socialize.
             </p>
-            <a href="#" className="text-primary font-bold text-sm flex items-center hover:text-secondary transition-colors">
+            <Link to="/news" className="text-primary font-bold text-sm flex items-center hover:text-secondary transition-colors">
               View Gallery <ArrowUpRight size={16} className="ml-1" />
-            </a>
+            </Link>
           </div>
           <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center pointer-events-none hidden lg:block">
              <h2 className="text-6xl font-serif font-bold text-white tracking-tight drop-shadow-md">CAMPUS LIFE</h2>
@@ -158,7 +147,9 @@ const Home: React.FC = () => {
               <div className="overflow-hidden rounded-lg mb-6">
                 <img src={LATEST_NEWS[0].image} alt={LATEST_NEWS[0].title} className="w-full h-80 object-cover group-hover:scale-105 transition-transform duration-500" />
               </div>
-              <h3 className="text-2xl font-serif font-bold text-gray-900 mb-3 group-hover:text-primary transition-colors">{LATEST_NEWS[0].title}</h3>
+              <h3 className="text-2xl font-serif font-bold text-gray-900 mb-3 group-hover:text-primary transition-colors">
+                <Link to={`/news/${LATEST_NEWS[0].id}`}>{LATEST_NEWS[0].title}</Link>
+              </h3>
               <p className="text-gray-600 leading-relaxed mb-4">{LATEST_NEWS[0].excerpt}</p>
               <div className="text-sm text-gray-400">{LATEST_NEWS[0].date}</div>
             </div>
@@ -171,7 +162,9 @@ const Home: React.FC = () => {
                     <img src={news.image} alt={news.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
                   </div>
                   <div>
-                    <h4 className="text-lg font-bold text-gray-900 mb-2 group-hover:text-primary transition-colors line-clamp-2">{news.title}</h4>
+                    <h4 className="text-lg font-bold text-gray-900 mb-2 group-hover:text-primary transition-colors line-clamp-2">
+                       <Link to={`/news/${news.id}`}>{news.title}</Link>
+                    </h4>
                     <p className="text-gray-500 text-sm line-clamp-2 mb-2">{news.excerpt}</p>
                     <span className="text-xs text-gray-400">{news.date}</span>
                   </div>
@@ -231,9 +224,9 @@ const Home: React.FC = () => {
                  <h2 className="text-3xl font-serif font-bold text-gray-900 mt-1">Upcoming Events</h2>
                  <div className="w-16 h-1 bg-secondary mt-4"></div>
               </div>
-              <a href="#" className="flex items-center text-sm font-bold text-gray-800 hover:text-primary transition-colors">
+              <Link to="/news" className="flex items-center text-sm font-bold text-gray-800 hover:text-primary transition-colors">
                 View all <ArrowUpRight size={16} className="ml-1" />
-              </a>
+              </Link>
            </div>
 
            <div className="space-y-4">
@@ -285,9 +278,9 @@ const Home: React.FC = () => {
             </div>
             
             <div className="mt-8">
-               <a href="#" className="text-xs font-bold text-primary flex items-center justify-center hover:text-secondary">
+               <Link to="/contact" className="text-xs font-bold text-primary flex items-center justify-center hover:text-secondary">
                   View all <ArrowUpRight size={12} className="ml-1" />
-               </a>
+               </Link>
             </div>
          </div>
       </section>
@@ -303,7 +296,7 @@ const Home: React.FC = () => {
                <h3 className="text-xl font-bold font-serif text-gray-800 uppercase tracking-wide">Subscribe to our newsletter.</h3>
             </div>
             
-            <form className="flex w-full md:w-auto gap-2">
+            <form className="flex w-full md:w-auto gap-2" onSubmit={(e) => e.preventDefault()}>
                <input type="email" placeholder="Enter your email" className="px-4 py-3 border border-gray-300 rounded w-full md:w-80 focus:outline-none focus:border-primary" />
                <button className="bg-primary text-white font-bold px-6 py-3 rounded hover:bg-blue-800 transition-colors">Subscribe</button>
             </form>

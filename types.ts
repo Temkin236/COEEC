@@ -2,6 +2,7 @@
 export interface NavItem {
   label: string;
   path: string;
+  children?: NavItem[];
 }
 
 export interface NewsItem {
@@ -10,7 +11,9 @@ export interface NewsItem {
   date: string;
   category: string;
   excerpt: string;
+  content?: string; // Full article content
   image: string;
+  author?: string;
 }
 
 export interface Department {
@@ -33,6 +36,7 @@ export interface Experience {
   organization: string;
   period: string;
   description: string;
+  isCurrent?: boolean;
 }
 
 export interface Publication {
@@ -81,6 +85,11 @@ export interface ResearchProject {
   status: 'Ongoing' | 'Completed';
   description: string;
   image: string;
+  content?: string;
+  objectives?: string[];
+  fundingSource?: string;
+  duration?: string;
+  partners?: string[];
 }
 
 export interface ChatMessage {

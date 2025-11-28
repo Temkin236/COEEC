@@ -1,7 +1,9 @@
+
 import React from 'react';
 import { RESEARCH_PROJECTS } from '../constants';
 import { FlaskConical, Microscope, FileText, ArrowRight } from 'lucide-react';
 import Hero from '../components/Hero';
+import { Link } from 'react-router-dom';
 
 const Research: React.FC = () => {
   return (
@@ -29,9 +31,9 @@ const Research: React.FC = () => {
                </div>
                <h3 className="text-xl font-bold font-serif text-gray-900 mb-3">{area.title}</h3>
                <p className="text-gray-600 leading-relaxed">{area.desc}</p>
-               <a href="#" className="inline-flex items-center text-sm font-bold text-primary mt-4 hover:text-secondary">
+               <Link to="/research" className="inline-flex items-center text-sm font-bold text-primary mt-4 hover:text-secondary">
                   Learn more <ArrowRight size={14} className="ml-1" />
-               </a>
+               </Link>
             </div>
           ))}
         </div>
@@ -62,9 +64,9 @@ const Research: React.FC = () => {
                 </div>
                 
                 <h3 className="text-2xl font-bold font-serif text-gray-900 mb-4 group-hover:text-primary transition-colors">
-                  {project.title}
+                  <Link to={`/research/${project.id}`}>{project.title}</Link>
                 </h3>
-                <p className="text-gray-600 mb-8 leading-relaxed text-lg">
+                <p className="text-gray-600 mb-8 leading-relaxed text-lg line-clamp-2">
                   {project.description}
                 </p>
                 
@@ -78,9 +80,9 @@ const Research: React.FC = () => {
                         <p className="text-sm font-medium text-gray-900">{project.lead}</p>
                       </div>
                    </div>
-                   <button className="text-primary font-bold text-sm flex items-center hover:text-secondary transition-colors">
+                   <Link to={`/research/${project.id}`} className="text-primary font-bold text-sm flex items-center hover:text-secondary transition-colors">
                      View Case Study <ArrowRight size={16} className="ml-1" />
-                   </button>
+                   </Link>
                 </div>
               </div>
             </div>

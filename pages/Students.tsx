@@ -1,6 +1,7 @@
+
 import React from 'react';
 import Hero from '../components/Hero';
-import { Users, Briefcase, GraduationCap, ArrowUpRight, Calendar } from 'lucide-react';
+import { Users, Briefcase, GraduationCap, ArrowUpRight } from 'lucide-react';
 
 const Students: React.FC = () => {
   return (

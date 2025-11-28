@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { useParams, Link, Navigate } from 'react-router-dom';
 import { DEPARTMENTS, LATEST_NEWS } from '../constants';
@@ -41,9 +42,9 @@ const DepartmentDetail: React.FC = () => {
            </h1>
 
            <div className="flex gap-4">
-             <button className="bg-white text-primary font-bold px-6 py-3 rounded hover:bg-secondary hover:text-primary transition-colors flex items-center gap-2">
+             <Link to="/academics" className="bg-white text-primary font-bold px-6 py-3 rounded hover:bg-secondary hover:text-primary transition-colors flex items-center gap-2">
                 Explore Programs <ArrowUpRight size={18} />
-             </button>
+             </Link>
            </div>
         </div>
       </div>
@@ -109,9 +110,9 @@ const DepartmentDetail: React.FC = () => {
                     <p className="text-gray-500 text-sm mb-6">
                       A comprehensive program designed to equip students with foundational knowledge and advanced skills.
                     </p>
-                    <a href="#" className="text-primary font-bold text-sm flex items-center hover:text-secondary transition-colors">
+                    <Link to="/academics" className="text-primary font-bold text-sm flex items-center hover:text-secondary transition-colors">
                       View Curriculum <ChevronRight size={16} />
-                    </a>
+                    </Link>
                  </div>
                ))}
             </div>
@@ -145,25 +146,15 @@ const DepartmentDetail: React.FC = () => {
                           {news.date}
                        </div>
                        <h3 className="text-lg font-bold text-gray-900 mb-3 line-clamp-2 group-hover:text-primary transition-colors">
-                          {news.title}
+                          <Link to={`/news/${news.id}`}>{news.title}</Link>
                        </h3>
                        <p className="text-gray-600 text-sm line-clamp-3 mb-4">
                           {news.excerpt}
                        </p>
-                       <a href="#" className="text-primary font-bold text-sm hover:underline">Read more</a>
+                       <Link to={`/news/${news.id}`} className="text-primary font-bold text-sm hover:underline">Read more</Link>
                     </div>
                  </div>
                ))}
-            </div>
-
-            <div className="flex justify-center mt-12 gap-2">
-               <button className="px-4 py-2 border border-gray-300 rounded hover:bg-gray-50 text-gray-600 flex items-center gap-1 text-sm font-medium">
-                  <ChevronLeft size={16}/> Previous
-               </button>
-               <button className="px-4 py-2 bg-primary text-white rounded text-sm font-medium">1</button>
-               <button className="px-4 py-2 border border-gray-300 rounded hover:bg-gray-50 text-gray-600 flex items-center gap-1 text-sm font-medium">
-                  Next <ChevronRight size={16}/>
-               </button>
             </div>
          </div>
       </section>

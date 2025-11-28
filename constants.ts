@@ -3,12 +3,55 @@ import { NavItem, NewsItem, Department, StaffMember, ResearchProject } from './t
 
 export const NAV_ITEMS: NavItem[] = [
   { label: 'Home', path: '/' },
-  { label: 'About', path: '/about' },
-  { label: 'Departments', path: '/departments' },
-  { label: 'Staff', path: '/staff' },
-  { label: 'Research', path: '/research' },
-  { label: 'Academics', path: '/academics' },
-  { label: 'Contact', path: '/contact' },
+  {
+    label: 'About Us',
+    path: '/about',
+    children: [
+      { label: 'College Overview', path: '/about' },
+      { label: 'Staff Directory', path: '/staff' },
+    ]
+  },
+  {
+    label: 'Academics',
+    path: '/academics',
+    children: [
+      { label: 'Departments', path: '/departments' },
+      { label: 'Academic Calendar', path: '/academics' }, 
+      { label: 'Resources', path: '/academics' }, 
+    ]
+  },
+  {
+    label: 'Research',
+    path: '/research',
+    children: [
+      { label: 'Projects & Labs', path: '/research' },
+      { label: 'Publications', path: '/research' },
+    ]
+  },
+  {
+    label: 'Students',
+    path: '/students',
+    children: [
+      { label: 'Student Life', path: '/students' },
+      { label: 'Career Center', path: '/students' },
+      { label: 'Download Center', path: '/downloads' },
+    ]
+  },
+  {
+    label: 'News & Events', 
+    path: '/news',
+    children: [
+       { label: 'Latest News', path: '/news' },
+       { label: 'Upcoming Events', path: '/news' },
+    ]
+  },
+  {
+    label: 'Contact Us',
+    path: '/contact',
+    children: [
+      { label: 'Get in Touch', path: '/contact' },
+    ]
+  },
 ];
 
 export const IMPACT_STATS = [
@@ -21,8 +64,8 @@ export const IMPACT_STATS = [
 export const QUICK_LINKS = [
   { label: "LIBRARY", url: "#" },
   { label: "E-LEARNING", url: "#" },
-  { label: "CAMPUS LIFE", url: "#" },
-  { label: "ALUMNI", url: "#" },
+  { label: "CAMPUS LIFE", url: "/students" },
+  { label: "ALUMNI", url: "/students" },
   { label: "MEET OUR STAFF", url: "/staff" },
 ];
 
@@ -35,7 +78,7 @@ export const UPCOMING_EVENTS = [
 export const PARTNERS = [
   { name: "Sida", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/85/Sida_logo.svg/1200px-Sida_logo.svg.png" },
   { name: "ASU", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0a/Arizona_State_University_logo.svg/1200px-Arizona_State_University_logo.svg.png" },
-  { name: "Ethio Telecom", logo: "https://upload.wikimedia.org/wikipedia/commons/e/e7/Ethio_telecom_logo.png" }, // Placeholder
+  { name: "Ethio Telecom", logo: "https://upload.wikimedia.org/wikipedia/commons/e/e7/Ethio_telecom_logo.png" }, 
   { name: "Ministry of Education", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/Emblem_of_Ethiopia.svg/1200px-Emblem_of_Ethiopia.svg.png" },
 ];
 
@@ -45,7 +88,9 @@ export const LATEST_NEWS: NewsItem[] = [
     title: "COEEC Secures Grant for AI Research Lab",
     date: "November 10, 2025",
     category: "Research",
+    author: "Research Office",
     excerpt: "The college has received significant funding to establish a state-of-the-art Artificial Intelligence research center aimed at solving local agricultural challenges.",
+    content: "The College of Electrical Engineering and Computing (COEEC) is proud to announce a historic milestone in its research trajectory. We have successfully secured a multi-million dollar grant to establish the 'Center for AI in Agriculture'. This state-of-the-art facility will focus on developing machine learning models to predict crop yields, detect diseases in coffee plants early, and optimize irrigation systems for the Oromia region. <br/><br/> The grant, provided by a consortium of international partners including Sida and the Ministry of Innovation, will fund high-performance computing clusters and student scholarships.",
     image: "https://picsum.photos/800/600?random=1"
   },
   {
@@ -53,7 +98,9 @@ export const LATEST_NEWS: NewsItem[] = [
     title: "AAU Showcases Digital Transformation",
     date: "November 05, 2025",
     category: "Conference",
+    author: "Dr. Sarah Ahmed",
     excerpt: "The university demonstrated its latest strides in digital education at the World Conference on Engineering Education.",
+    content: "At the recent World Conference on Engineering Education held in Geneva, ASTU's delegation, led by COEEC representatives, showcased our proprietary E-Learning platform. The platform, built entirely by our Computer Science faculty and students, now supports over 20,000 concurrent users. <br/><br/> 'This is a testament to the capability of Ethiopian software engineers,' remarked Dr. Sarah Ahmed during her keynote address.",
     image: "https://picsum.photos/800/600?random=2"
   },
   {
@@ -61,8 +108,40 @@ export const LATEST_NEWS: NewsItem[] = [
     title: "Dr. Kebede Named Fellow of IEEE",
     date: "October 28, 2025",
     category: "Faculty",
+    author: "Dean's Office",
     excerpt: "In recognition of his contributions to renewable energy systems, Dr. Kebede has been elevated to the grade of IEEE Fellow.",
+    content: "We are thrilled to announce that Dr. Kebede, a senior professor in the Power Engineering department, has been named an IEEE Fellow. This is one of the highest honors in the engineering profession. Dr. Kebede's work on microgrid stability in developing nations has been cited over 5,000 times and has influenced policy in three African nations.",
     image: "https://picsum.photos/800/600?random=3"
+  },
+  {
+    id: 4,
+    title: "Annual Innovation Hackathon Winners",
+    date: "September 20, 2025",
+    category: "Campus Life",
+    author: "Student Council",
+    excerpt: "Students from the CSE department took home the grand prize for their automated irrigation system powered by AI.",
+    content: "The 2025 Innovation Hackathon concluded this weekend with team 'GreenTech' taking the top prize. Their solution, a solar-powered irrigation controller that communicates via SMS for remote areas without internet, wowed the judges. <br/><br/> The team will represent ASTU at the national finals in Addis Ababa next month.",
+    image: "https://picsum.photos/800/600?random=20"
+  },
+  {
+    id: 5,
+    title: "New Partnership with Ethio Telecom",
+    date: "September 15, 2025",
+    category: "Partnership",
+    author: "Corporate Relations",
+    excerpt: "A strategic alliance to provide internship opportunities and joint research initiatives in 5G technologies.",
+    content: "COEEC and Ethio Telecom have signed a Memorandum of Understanding (MoU) to bridge the industry-academia gap. The partnership includes a dedicated 5G lab on campus, summer internships for 50 3rd-year students annually, and joint curriculum development for telecommunications courses.",
+    image: "https://picsum.photos/800/600?random=21"
+  },
+  {
+    id: 6,
+    title: "Visiting Professor Lecture Series",
+    date: "September 05, 2025",
+    category: "Events",
+    author: "Academic Office",
+    excerpt: "Renowned expert Dr. Elena Rossi will be delivering a series of lectures on Quantum Computing next week.",
+    content: "The Academic Office invites all students and staff to the 'Frontiers of Computing' lecture series. This month, we host Dr. Elena Rossi from MIT, who will demystify Quantum Computing. The sessions will cover Quantum Gates, Algorithms, and the future of cryptography.",
+    image: "https://picsum.photos/800/600?random=22"
   }
 ];
 
@@ -201,6 +280,16 @@ export const RESEARCH_PROJECTS: ResearchProject[] = [
     lead: "Dr. Sarah Ahmed",
     status: "Ongoing",
     description: "Developing a sensor network to monitor soil moisture and automate irrigation for local farms in the Oromia region.",
+    content: "Agriculture is the backbone of the Ethiopian economy, yet many farmers rely on traditional methods that can be inefficient. This project aims to deploy a robust Internet of Things (IoT) network across pilot farms in the Oromia region. By installing soil moisture, temperature, and humidity sensors, we can collect real-time data. <br/><br/> This data is processed in the cloud using AI algorithms to determine the optimal watering schedules. The system then automatically triggers irrigation valves, saving water and improving crop yields by an estimated 20%.",
+    objectives: [
+       "Design low-power wireless sensor nodes",
+       "Develop a localized cloud platform for data analysis",
+       "Train 100 local farmers on digital tool usage",
+       "Reduce water wastage by 30%"
+    ],
+    fundingSource: "Ministry of Innovation & Technology",
+    duration: "2024 - 2026",
+    partners: ["Oromia Agriculture Bureau", "Ethio Telecom"],
     image: "https://picsum.photos/800/600?random=11"
   },
   {
@@ -209,6 +298,15 @@ export const RESEARCH_PROJECTS: ResearchProject[] = [
     lead: "Dr. Fikadu Tafesse",
     status: "Completed",
     description: "Design and implementation of affordable solar inverters for rural electrification projects.",
+    content: "Access to reliable electricity remains a challenge in many off-grid rural communities. Imported solar inverters are often expensive and difficult to repair. This project focused on designing a high-efficiency solar inverter using locally sourced components and simplified circuitry. <br/><br/> The final prototype is 40% cheaper than imported alternatives and includes features specifically tailored for the local climate, such as enhanced heat dissipation and dust protection.",
+    objectives: [
+       "Create an open-source inverter design",
+       "Achieve 95% conversion efficiency",
+       "Pilot deployment in 50 households"
+    ],
+    fundingSource: "Sida (Swedish International Development Cooperation Agency)",
+    duration: "2023 - 2024",
+    partners: ["Rural Energy Agency", "TVET Institutes"],
     image: "https://picsum.photos/800/600?random=12"
   }
 ];

@@ -2,7 +2,7 @@
 import React from 'react';
 import { useParams, Link, Navigate } from 'react-router-dom';
 import { STAFF_MEMBERS } from '../constants';
-import { Mail, Phone, MapPin, Linkedin, Twitter, Globe, Download, Calendar, BookOpen, Briefcase, GraduationCap, ChevronRight, Home } from 'lucide-react';
+import { Mail, MapPin, Linkedin, Twitter, Download, Calendar, BookOpen, Briefcase, GraduationCap, ChevronRight, Home } from 'lucide-react';
 
 const StaffProfile: React.FC = () => {
   const { id } = useParams<{ id: string }>();

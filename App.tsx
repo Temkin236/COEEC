@@ -10,10 +10,12 @@ import DepartmentDetail from './pages/DepartmentDetail';
 import Staff from './pages/Staff';
 import StaffProfile from './pages/StaffProfile';
 import Research from './pages/Research';
+import ProjectDetail from './pages/ProjectDetail';
 import Contact from './pages/Contact';
 import Academics from './pages/Academics';
 import Students from './pages/Students';
 import News from './pages/News';
+import NewsDetail from './pages/NewsDetail';
 import Downloads from './pages/Downloads';
 
 function App() {
@@ -28,9 +30,11 @@ function App() {
           <Route path="/staff" element={<Staff />} />
           <Route path="/staff/:id" element={<StaffProfile />} />
           <Route path="/research" element={<Research />} />
+          <Route path="/research/:id" element={<ProjectDetail />} />
           <Route path="/academics" element={<Academics />} />
           <Route path="/students" element={<Students />} />
           <Route path="/news" element={<News />} />
+          <Route path="/news/:id" element={<NewsDetail />} />
           <Route path="/downloads" element={<Downloads />} />
           <Route path="/contact" element={<Contact />} />
           {/* Fallback route */}

@@ -1,6 +1,7 @@
+
 import React from 'react';
 import Hero from '../components/Hero';
-import { Calendar, FileText, Download, Bell, BookOpen, Clock } from 'lucide-react';
+import { FileText, Download, Bell, BookOpen, Clock } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const Academics: React.FC = () => {

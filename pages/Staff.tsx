@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { STAFF_MEMBERS } from '../constants';
 import Hero from '../components/Hero';
-import { Search, Mail, BookOpen, User, ArrowRight, Briefcase, GraduationCap } from 'lucide-react';
+import { Search, ArrowRight, Briefcase, GraduationCap, User } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const Staff: React.FC = () => {
