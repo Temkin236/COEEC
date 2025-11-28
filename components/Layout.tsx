@@ -21,10 +21,10 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     <div className="min-h-screen flex flex-col font-sans text-gray-800">
       {/* Top Bar */}
       <div className="bg-white border-b border-gray-100 py-2 px-4 text-xs md:text-sm text-gray-600 hidden md:block">
-        <div className="max-w-7xl mx-auto flex justify-between items-center">
+        <div className="max-w-[1440px] mx-auto flex justify-between items-center">
           <div className="flex gap-4 items-center">
              <div className="flex items-center gap-2">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/Emblem_of_Ethiopia.svg/1200px-Emblem_of_Ethiopia.svg.png" alt="Flag" className="h-4 w-auto"/>
+                <img src="/astu-logo.jpg" alt="Flag" className="h-4 w-auto"/>
                 <span className="font-semibold text-primary">Adama Science and Technology University</span>
              </div>
              <span className="text-gray-300">|</span>
@@ -51,7 +51,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
       {/* Main Header */}
       <header className="sticky top-0 z-50 bg-white shadow-sm border-b border-gray-100">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-24">
             {/* Logo Area */}
             <Link to="/" className="flex-shrink-0 flex items-center gap-4 group">
@@ -196,7 +196,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
       {/* Footer */}
       <footer className="bg-primary text-white pt-16 pb-8">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
             <div className="space-y-6">
@@ -206,7 +206,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                  </div>
                  <div className="flex flex-col">
                     <span className="font-bold text-xl leading-none font-serif">COEEC</span>
-                    <span className="text-[10px] text-gray-300 uppercase tracking-widest mt-1">Addis Ababa University</span>
+                    <span className="text-[10px] text-gray-300 uppercase tracking-widest mt-1">Adama Science And Technology University</span>
                  </div>
               </div>
               <p className="text-gray-300 text-sm leading-relaxed">

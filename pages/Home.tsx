@@ -18,9 +18,9 @@ const Home: React.FC = () => {
       <section className="relative h-[600px] md:h-[700px] flex items-center bg-primary">
         <div className="absolute inset-0 z-0">
            <img 
-            src="https://picsum.photos/1920/1080?random=100" 
+            src="/home.jpg" 
             alt="University Building" 
-            className="w-full h-full object-cover opacity-30 mix-blend-overlay"
+            className="w-full h-full object-cover opacity-70 mix-blend-overlay"
            />
            <div className="absolute inset-0 bg-gradient-to-r from-primary via-primary/80 to-transparent"></div>
         </div>
@@ -220,7 +220,7 @@ const Home: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
            <div className="flex justify-between items-end mb-12">
               <div>
-                 <p className="text-gray-500 text-sm font-medium mb-2">AAU in motion</p>
+                 <p className="text-gray-500 text-sm font-medium mb-2">ASTU in motion</p>
                  <h2 className="text-3xl font-serif font-bold text-gray-900 mt-1">Upcoming Events</h2>
                  <div className="w-16 h-1 bg-secondary mt-4"></div>
               </div>
@@ -291,7 +291,7 @@ const Home: React.FC = () => {
             <div className="flex items-center gap-4">
                <div className="bg-white p-2 border border-gray-100 rounded shadow-sm">
                   {/* Mock Emblem */}
-                  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/Emblem_of_Ethiopia.svg/1200px-Emblem_of_Ethiopia.svg.png" className="w-16 h-16 object-contain opacity-50" alt="Emblem"/>
+                  <img src="/astu-logo.jpg" className="w-16 h-16 object-contain opacity-70" alt="Emblem"/>
                </div>
                <h3 className="text-xl font-bold font-serif text-gray-800 uppercase tracking-wide">Subscribe to our newsletter.</h3>
             </div>

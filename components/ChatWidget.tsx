@@ -112,7 +112,7 @@ const ChatWidget: React.FC = () => {
 
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="bg-secondary hover:bg-amber-400 text-primary font-bold p-4 rounded-full shadow-lg transition-transform hover:scale-105 flex items-center gap-2"
+        className="bg-secondary hover:bg-secondary/95 text-primary font-bold p-4 rounded-full shadow-lg transition-transform hover:scale-105 flex items-center gap-2"
       >
         {isOpen ? <X size={24} /> : <MessageCircle size={24} />}
         {!isOpen && <span className="hidden md:inline">Ask AI</span>}

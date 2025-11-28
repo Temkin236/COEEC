@@ -1,8 +1,9 @@
-
 import React from 'react';
 import { HashRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+
 import Layout from './components/Layout';
 import ChatWidget from './components/ChatWidget';
+
 import Home from './pages/Home';
 import About from './pages/About';
 import Departments from './pages/Departments';
@@ -37,9 +38,11 @@ function App() {
           <Route path="/news/:id" element={<NewsDetail />} />
           <Route path="/downloads" element={<Downloads />} />
           <Route path="/contact" element={<Contact />} />
-          {/* Fallback route */}
+
+          {/* Wildcard fallback */}
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
+
         <ChatWidget />
       </Layout>
     </Router>

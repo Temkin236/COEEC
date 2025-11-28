@@ -23,9 +23,9 @@ const NewsDetail: React.FC = () => {
          <img 
            src={news.image} 
            alt={news.title} 
-           className="absolute inset-0 w-full h-full object-cover opacity-50"
+           className="absolute inset-0 w-full h-full object-cover opacity-60"
          />
-         <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"></div>
+         <div className="absolute inset-0 bg-gradient-to-r from-primary/90 via-primary/70 to-transparent"></div>
          
          <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full flex flex-col justify-end pb-12">
             <div className="flex items-center text-xs text-gray-300 mb-6 font-medium">
@@ -57,6 +57,8 @@ const NewsDetail: React.FC = () => {
             </div>
          </div>
       </div>
+
+      
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
          <div className="flex flex-col lg:flex-row gap-16">
