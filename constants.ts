@@ -76,10 +76,10 @@ export const UPCOMING_EVENTS = [
 ];
 
 export const PARTNERS = [
-  { name: "INSA", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/85/Sida_logo.svg/1200px-Sida_logo.svg.png" },
-  { name: "ASU", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0a/Arizona_State_University_logo.svg/1200px-Arizona_State_University_logo.svg.png" },
-  { name: "Ethio Telecom", logo: "https://upload.wikimedia.org/wikipedia/commons/e/e7/Ethio_telecom_logo.png" }, 
-  { name: "Ministry of Education", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/Emblem_of_Ethiopia.svg/1200px-Emblem_of_Ethiopia.svg.png" },
+  { name: "INSA", logo: "https://upload.wikimedia.org/wikipedia/commons/9/93/Logo_of_Ethiopian_INSA.png" },
+  { name: "Ethio Airlines", logo: "http://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSJNLAab0C07S5-KaRvzakBrJOTTr71OV1px6v9GOJ0WHmzTmzz3ipjfMzj7gzzNwfelG4&usqp=CAU" },
+  { name: "Ethio Telecom", logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRHCbY7ehFiDHEe5TohsUEf2EQsX66tkp17SYkgPQ6nTkI8uTU4nB0efaWfOgrDOzf2WQ&usqp=CAU" }, 
+  { name: "Ministry of Education", logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQiDI7riRUyG4Nf_c0VUJqUfFYLoVFIJHlw1y8pbLIx3cA5ua5gw8vfPFDvPilLd54wK6I&usqp=CAU" },
 ];
 
 export const LATEST_NEWS: NewsItem[] = [
