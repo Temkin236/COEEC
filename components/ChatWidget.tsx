@@ -1,6 +1,13 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { MessageCircle, X, Send, Bot, User } from 'lucide-react';
-import { generateChatResponse } from '../services/geminiService';
+// Local stubbed chat responder (replaces external AI service)
+const generateChatResponse = async (userMessage: string): Promise<string> => {
+  // Simulate latency
+  await new Promise((r) => setTimeout(r, 500));
+  // Minimal, safe stub: echo user message and provide a fallback
+  if (!userMessage || !userMessage.trim()) return "Please enter a question.";
+  return `Assistant (local stub): ${userMessage}`;
+};
 import { ChatMessage } from '../types';
 
 const ChatWidget: React.FC = () => {
