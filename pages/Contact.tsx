@@ -1,8 +1,27 @@
 
-import React from 'react';
+import React, { useState } from 'react';
+import { submitContactForm } from '../services/api';
 import { MapPin, Phone, Mail, Clock } from 'lucide-react';
 
 const Contact: React.FC = () => {
+  const [formData, setFormData] = useState({ firstName: '', lastName: '', email: '', subject: 'General Inquiry', message: '' });
+  const [submitting, setSubmitting] = useState(false);
+  const [status, setStatus] = useState<'idle' | 'success' | 'error'>('idle');
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setSubmitting(true);
+    setStatus('idle');
+    try {
+      await submitContactForm(formData);
+      setStatus('success');
+      setFormData({ firstName: '', lastName: '', email: '', subject: 'General Inquiry', message: '' });
+    } catch (err) {
+      setStatus('error');
+    } finally {
+      setSubmitting(false);
+    }
+  };
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
@@ -71,24 +90,26 @@ const Contact: React.FC = () => {
           {/* Form */}
           <div className="bg-white p-8 lg:p-10 rounded-xl shadow-lg border-t-4 border-primary">
             <h3 className="text-2xl font-bold text-gray-900 mb-6">Send us a Message</h3>
-            <form className="space-y-6" onSubmit={(e) => e.preventDefault()}>
+            {status === 'success' && <div className="mb-4 p-4 bg-green-100 text-green-700 rounded-lg">Message sent successfully!</div>}
+            {status === 'error' && <div className="mb-4 p-4 bg-red-100 text-red-700 rounded-lg">Failed to send message. Please try again.</div>}
+            <form className="space-y-6" onSubmit={handleSubmit}>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">First Name</label>
-                  <input type="text" className="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-300 focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all" />
+                  <input type="text" required value={formData.firstName} onChange={(e) => setFormData({...formData, firstName: e.target.value})} className="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-300 focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all" />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">Last Name</label>
-                  <input type="text" className="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-300 focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all" />
+                  <input type="text" required value={formData.lastName} onChange={(e) => setFormData({...formData, lastName: e.target.value})} className="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-300 focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all" />
                 </div>
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
-                <input type="email" className="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-300 focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all" />
+                <input type="email" required value={formData.email} onChange={(e) => setFormData({...formData, email: e.target.value})} className="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-300 focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all" />
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">Subject</label>
-                <select className="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-300 focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all">
+                <select value={formData.subject} onChange={(e) => setFormData({...formData, subject: e.target.value})} className="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-300 focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all">
                   <option>General Inquiry</option>
                   <option>Admissions</option>
                   <option>Research Partnership</option>
@@ -97,10 +118,10 @@ const Contact: React.FC = () => {
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">Message</label>
-                <textarea rows={5} className="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-300 focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all"></textarea>
+                <textarea rows={5} required value={formData.message} onChange={(e) => setFormData({...formData, message: e.target.value})} className="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-300 focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all"></textarea>
               </div>
-              <button className="w-full bg-primary text-white font-bold py-4 rounded-lg hover:bg-blue-800 transition-colors shadow-md">
-                Send Message
+              <button type="submit" disabled={submitting} className="w-full bg-primary text-white font-bold py-4 rounded-lg hover:bg-blue-800 transition-colors shadow-md disabled:opacity-50 disabled:cursor-not-allowed">
+                {submitting ? 'Sending...' : 'Send Message'}
               </button>
             </form>
           </div>

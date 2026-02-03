@@ -1,11 +1,21 @@
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { RESEARCH_PROJECTS } from '../constants';
+import { getResearchProjects } from '../services/api';
 import { FlaskConical, Microscope, FileText, ArrowRight } from 'lucide-react';
 import Hero from '../components/Hero';
 import { Link } from 'react-router-dom';
 
 const Research: React.FC = () => {
+  const [projects, setProjects] = useState(RESEARCH_PROJECTS);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    getResearchProjects().then(data => {
+      setProjects(data);
+      setLoading(false);
+    }).catch(() => setLoading(false));
+  }, []);
   return (
     <div className="min-h-screen bg-white">
       <Hero
@@ -44,8 +54,14 @@ const Research: React.FC = () => {
            <div className="h-px bg-gray-200 flex-grow"></div>
         </div>
         
+        {loading && (
+          <div className="flex justify-center items-center py-20">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+          </div>
+        )}
+        
         <div className="space-y-12">
-          {RESEARCH_PROJECTS.map((project) => (
+          {projects.map((project) => (
             <div key={project.id} className="flex flex-col md:flex-row group bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-xl transition-all duration-300">
               <div className="md:w-2/5 h-64 md:h-auto overflow-hidden">
                 <img 

@@ -1,15 +1,25 @@
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Hero from '../components/Hero';
 import { LATEST_NEWS } from '../constants';
+import { getNews } from '../services/api';
 import { Calendar, User, ArrowRight, ArrowUpRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const News: React.FC = () => {
-  // Sort or prioritize news (assuming LATEST_NEWS is already sorted by date)
-  const featuredNews = LATEST_NEWS[0];
-  const secondaryNews = LATEST_NEWS.slice(1, 3);
-  const otherNews = LATEST_NEWS.slice(3);
+  const [news, setNews] = useState(LATEST_NEWS);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    getNews().then(data => {
+      setNews(data);
+      setLoading(false);
+    }).catch(() => setLoading(false));
+  }, []);
+
+  const featuredNews = news[0];
+  const secondaryNews = news.slice(1, 3);
+  const otherNews = news.slice(3);
 
   return (
     <div className="bg-white min-h-screen">
@@ -22,7 +32,14 @@ const News: React.FC = () => {
       />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        {loading && (
+          <div className="flex justify-center items-center py-20">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+          </div>
+        )}
         
+        {!loading && (
+        <>
         {/* Bento Grid Layout */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 auto-rows-[minmax(300px,auto)] mb-16">
            
@@ -143,6 +160,8 @@ const News: React.FC = () => {
               </button>
            </nav>
         </div>
+        </>
+        )}
       </div>
     </div>
   );
