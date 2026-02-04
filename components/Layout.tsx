@@ -179,10 +179,10 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                   </NavLink>
                  )
               })}
-              <div className="pt-4 border-t border-gray-100 mt-4 flex flex-col gap-2">
-                 <a href="#" className="block px-4 py-2 text-sm text-gray-600 hover:text-primary">Student Portal</a>
-                 <a href="#" className="block px-4 py-2 text-sm text-gray-600 hover:text-primary">Staff Email</a>
-              </div>
+                <div className="pt-4 border-t border-gray-100 mt-4 flex flex-col gap-2">
+                  <a href="https://estudent.astu.edu.et/" target="_blank" rel="noreferrer" className="block px-4 py-2 text-sm text-gray-600 hover:text-primary">Student Portal</a>
+                  <a href="#" className="block px-4 py-2 text-sm text-gray-600 hover:text-primary">Staff Email</a>
+                </div>
             </div>
           </div>
         )}
@@ -243,7 +243,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
             <div>
               <h3 className="text-lg font-bold font-serif mb-6 border-l-4 border-secondary pl-3">Quick Links</h3>
               <ul className="space-y-3 text-sm text-gray-300">
-                <li><a href="#" className="hover:text-white hover:translate-x-1 transition-transform inline-block">Portal</a></li>
+                <li><a href="https://estudent.astu.edu.et/" target="_blank" rel="noreferrer" className="hover:text-white hover:translate-x-1 transition-transform inline-block">Portal</a></li>
                 <li><a href="#" className="hover:text-white hover:translate-x-1 transition-transform inline-block">E-Learning</a></li>
                 <li><Link to="/students" className="hover:text-white hover:translate-x-1 transition-transform inline-block">Campus Life</Link></li>
                 <li><Link to="/staff" className="hover:text-white hover:translate-x-1 transition-transform inline-block">Staff</Link></li>

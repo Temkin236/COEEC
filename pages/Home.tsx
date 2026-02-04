@@ -95,9 +95,9 @@ const Home: React.FC = () => {
               COEEC provides an exceptional educational experience that prepares students for successful completion, employability, and job creation in the digital age.
             </p>
             <div className="flex flex-wrap gap-4">
-              <Link to="/contact" className="bg-white text-primary font-bold px-8 py-3.5 rounded hover:bg-secondary hover:text-primary transition-colors flex items-center gap-2">
+              <a href="https://estudent.astu.edu.et/" target="_blank" rel="noreferrer" className="bg-white text-primary font-bold px-8 py-3.5 rounded hover:bg-secondary hover:text-primary transition-colors flex items-center gap-2">
                 Portal <ArrowUpRight size={18} />
-              </Link>
+              </a>
               <Link to="/departments" className="border border-white text-white font-bold px-8 py-3.5 rounded hover:bg-white hover:text-primary transition-colors flex items-center gap-2">
                 Study at COEEC <ArrowUpRight size={18} />
               </Link>
