@@ -1,8 +1,9 @@
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Hero from '../components/Hero';
 import { FileText, Download, Bell, BookOpen, Clock } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { getCalendarEvents } from '../services/api';
 
 const Academics: React.FC = () => {
   return (
@@ -52,38 +53,7 @@ const Academics: React.FC = () => {
                  </button>
               </div>
 
-              <div className="bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm">
-                 <table className="min-w-full divide-y divide-gray-200">
-                    <thead className="bg-gray-50">
-                       <tr>
-                          <th className="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Date</th>
-                          <th className="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Event</th>
-                          <th className="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Status</th>
-                       </tr>
-                    </thead>
-                    <tbody className="bg-white divide-y divide-gray-200">
-                       {[
-                          { date: "Sept 15 - 16", event: "Registration for 2nd Year & Above", status: "Completed" },
-                          { date: "Sept 20", event: "Classes Begin", status: "Completed" },
-                          { date: "Nov 10 - 15", event: "Mid-Semester Examinations", status: "Upcoming" },
-                          { date: "Jan 10", event: "Classes End", status: "Upcoming" },
-                          { date: "Jan 15 - 30", event: "Final Examinations", status: "Upcoming" },
-                       ].map((item, idx) => (
-                          <tr key={idx} className="hover:bg-gray-50 transition-colors">
-                             <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{item.date}</td>
-                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{item.event}</td>
-                             <td className="px-6 py-4 whitespace-nowrap">
-                                <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                                   item.status === 'Completed' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'
-                                }`}>
-                                   {item.status}
-                                </span>
-                             </td>
-                          </tr>
-                       ))}
-                    </tbody>
-                 </table>
-              </div>
+                 <CalendarTable />
            </div>
 
            {/* Announcements Sidebar */}
@@ -120,3 +90,64 @@ const Academics: React.FC = () => {
 };
 
 export default Academics;
+
+const CalendarTable: React.FC = () => {
+   const [items, setItems] = useState<Array<any>>([]);
+   const [loading, setLoading] = useState(true);
+
+   useEffect(() => {
+      let mounted = true;
+      getCalendarEvents(true).then(data => {
+         if (!mounted) return;
+         setItems(Array.isArray(data) ? data : []);
+         setLoading(false);
+      }).catch(() => setLoading(false));
+      return () => { mounted = false; };
+   }, []);
+
+   if (loading) {
+      return (
+         <div className="flex justify-center items-center py-12">
+            <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-primary"></div>
+         </div>
+      );
+   }
+
+   if (!items || items.length === 0) {
+      return (
+         <div className="p-12 text-center text-gray-500 bg-white border border-gray-200 rounded-lg">
+            <p className="text-lg font-bold">No academic calendar entries available.</p>
+            <p className="text-sm">Check back later or contact the academic office.</p>
+         </div>
+      );
+   }
+
+   return (
+      <div className="bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm">
+         <table className="min-w-full divide-y divide-gray-200">
+            <thead className="bg-gray-50">
+               <tr>
+                  <th className="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Date / Period</th>
+                  <th className="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Title</th>
+                  <th className="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Status</th>
+               </tr>
+            </thead>
+            <tbody className="bg-white divide-y divide-gray-200">
+               {items.map((it, idx) => (
+                  <tr key={it.id || idx} className="hover:bg-gray-50 transition-colors">
+                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{it.academicYear || it.semester || it.date || '—'}</td>
+                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{it.title || it.description || '—'}</td>
+                     <td className="px-6 py-4 whitespace-nowrap">
+                        <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                           (it.state === 'PUBLISHED' || it.state === 'ACTIVE' || it.state === 'COMPLETED') ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'
+                        }`}>
+                           {it.state || 'DRAFT'}
+                        </span>
+                     </td>
+                  </tr>
+               ))}
+            </tbody>
+         </table>
+      </div>
+   );
+};

@@ -28,7 +28,7 @@ export const NAV_ITEMS: NavItem[] = [
     path: '/research',
     children: [
       { label: 'Projects & Labs', path: '/research' },
-      { label: 'Publications', path: '/research' },
+      { label: 'Publications', path: '/publications' },
     ]
   },
   {
@@ -45,7 +45,7 @@ export const NAV_ITEMS: NavItem[] = [
     path: '/news',
     children: [
        { label: 'Latest News', path: '/news' },
-       { label: 'Upcoming Events', path: '/news' },
+       { label: 'Upcoming Events', path: '/events' },
     ]
   },
   {

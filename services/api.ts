@@ -28,12 +28,23 @@ export async function getNewsById(id: number | string) {
 }
 
 // ========== CONTACT ==========
-export async function getContactMessages() {
+export async function getContactMessages(page: number = 1, limit: number = 10, category?: string) {
   try {
-    return await fetchJSON('/contact-messages');
+    const qs = `?page=${page}&limit=${limit}${category ? `&category=${encodeURIComponent(category)}` : ''}`;
+    const data = await fetchJSON(`/contact-messages${qs}`);
+    return Array.isArray(data) ? data : [];
   } catch (err) {
     console.warn('[API] Contact messages fetch failed:', err);
     return [];
+  }
+}
+
+export async function getContactMessageById(id: string | number) {
+  try {
+    return await fetchJSON(`/contact-messages/${id}`);
+  } catch (err) {
+    console.warn('[API] Contact message fetch failed:', err);
+    return null;
   }
 }
 
@@ -84,6 +95,24 @@ export async function getPublications() {
   }
 }
 
+export async function getMyPublications() {
+  try {
+    return await fetchJSON('/publications/me');
+  } catch (err) {
+    console.error('[API] My publications fetch failed:', err);
+    return [];
+  }
+}
+
+export async function getPublicationById(id: string | number) {
+  try {
+    return await fetchJSON(`/publications/${id}`);
+  } catch (err) {
+    console.error('[API] Publication detail fetch failed:', err);
+    return null;
+  }
+}
+
 // ========== STUDENT LIFE / CLUBS ==========
 export async function getClubs() {
   try {
@@ -115,9 +144,10 @@ export async function getStudentLife() {
 }
 
 // ========== EVENTS ==========
-export async function getEvents() {
+export async function getEvents(page: number = 1, limit: number = 10) {
   try {
-    const data = await fetchJSON('/events/public');
+    const qs = `?page=${page}&limit=${limit}`;
+    const data = await fetchJSON(`/events/public${qs}`);
     return Array.isArray(data) ? data : [];
   } catch (err) {
     console.error('[API] Events fetch failed:', err);
@@ -135,9 +165,10 @@ export async function getEventById(id: number | string) {
 }
 
 // ========== ACADEMIC CALENDAR ==========
-export async function getCalendarEvents() {
+export async function getCalendarEvents(all: boolean = true) {
   try {
-    const data = await fetchJSON('/academic-calendar');
+    const qp = all ? '?all=true' : '';
+    const data = await fetchJSON(`/academic-calendar${qp}`);
     return Array.isArray(data) ? data : [];
   } catch (err) {
     console.error('[API] Calendar fetch failed:', err);

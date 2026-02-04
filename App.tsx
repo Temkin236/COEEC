@@ -18,6 +18,11 @@ import Students from './pages/Students';
 import News from './pages/News';
 import NewsDetail from './pages/NewsDetail';
 import Downloads from './pages/Downloads';
+import Events from './pages/Events';
+import EventDetail from './pages/EventDetail';
+import Publications from './pages/Publications';
+import PublicationDetail from './pages/PublicationDetail';
+import ContactMessages from './pages/ContactMessages';
 
 function App() {
   return (
@@ -32,6 +37,11 @@ function App() {
           <Route path="/staff/:id" element={<StaffProfile />} />
           <Route path="/research" element={<Research />} />
           <Route path="/research/:id" element={<ProjectDetail />} />
+          <Route path="/publications" element={<Publications />} />
+          <Route path="/publications/:id" element={<PublicationDetail />} />
+          <Route path="/events" element={<Events />} />
+          <Route path="/events/:id" element={<EventDetail />} />
+          <Route path="/contact-messages" element={<ContactMessages />} />
           <Route path="/academics" element={<Academics />} />
           <Route path="/students" element={<Students />} />
           <Route path="/news" element={<News />} />
