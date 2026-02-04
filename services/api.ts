@@ -258,10 +258,18 @@ export async function getPageBySlug(slug: string) {
 // ========== MEDIA ==========
 export async function getMediaFiles() {
   try {
-    const data = await fetchJSON('/media/public/media');
+    const url = `${BASE_URL}/media/public/media`;
+    const res = await fetch(url);
+    if (!res.ok) {
+      // Server returned an error (500, etc.) — don't throw to avoid noisy uncaught promise logs in the UI.
+      console.warn('[API] Media files fetch returned non-OK status:', res.status);
+      return [];
+    }
+    const data = await res.json().catch(() => []);
     return Array.isArray(data) ? data : [];
   } catch (err) {
-    console.error('[API] Media files fetch failed:', err);
+    // Network or other unexpected error — return empty list silently.
+    console.warn('[API] Media files fetch failed:', err);
     return [];
   }
 }

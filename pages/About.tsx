@@ -1,5 +1,6 @@
 import React from 'react';
-import { Target, Eye, History, Quote, Users, CheckCircle, GraduationCap, Building, Globe, Award, BookOpen } from 'lucide-react';
+import { Target, Eye, History, Quote, Users, CheckCircle, Building, Globe, Award, BookOpen } from 'lucide-react';
+import { GraduationCap } from '../components/IconProxy';
 import Hero from '../components/Hero';
 
 const About: React.FC = () => {

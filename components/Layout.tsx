@@ -1,8 +1,9 @@
 
 import React, { useState } from 'react';
 import { NavLink, Link, useLocation } from 'react-router-dom';
-import { Menu, X, Globe, ChevronDown, GraduationCap, Search, Facebook, Twitter, Linkedin, Instagram, Youtube } from 'lucide-react';
+import { Menu, X, Globe, ChevronDown, Search, Facebook, Twitter, Linkedin, Instagram, Youtube } from 'lucide-react';
 import { NAV_ITEMS } from '../constants';
+import { GraduationCap } from './IconProxy';
 
 const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);

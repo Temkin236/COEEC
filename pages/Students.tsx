@@ -1,7 +1,8 @@
 
 import React from 'react';
 import Hero from '../components/Hero';
-import { Users, Briefcase, GraduationCap, ArrowUpRight } from 'lucide-react';
+import { Users, Briefcase, ArrowUpRight } from 'lucide-react';
+import { GraduationCap } from '../components/IconProxy';
 
 const Students: React.FC = () => {
   return (

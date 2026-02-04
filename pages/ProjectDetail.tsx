@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, Link, Navigate } from 'react-router-dom';
 import { getResearchProjectById } from '../services/api';
 import { ResearchProject } from '../types';
-import { Home, ChevronRight, Calendar, User, CheckCircle2 } from 'lucide-react';
+import { Home, ChevronRight, Calendar, User, CheckCircle2, Users, DollarSign } from 'lucide-react';
 
 const ProjectDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -130,9 +130,10 @@ const ProjectDetail: React.FC = () => {
                             <div>
                                <p className="text-xs text-gray-500 font-bold uppercase">Partners</p>
                                <ul className="list-disc list-inside text-sm text-gray-900 mt-1">
-                                  {project.partners.map((partner, i) => (
-                                     <li key={i}>{partner}</li>
-                                  ))}
+                                  {project.partners.map((partner, i) => {
+                                     const pname = typeof partner === 'string' ? partner : (partner && (partner.name || partner.title || partner.org || partner.company)) || 'Partner';
+                                     return <li key={i}>{pname}</li>;
+                                  })}
                                </ul>
                             </div>
                          </div>

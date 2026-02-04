@@ -22,16 +22,28 @@ const Downloads: React.FC = () => {
    const filteredFiles = files.filter(file => {
       if (!file) return false;
       const matchesCategory = filter === 'All' || (file.category === filter);
-      const fileName = (file.name || file.title || '').toString();
-      const matchesSearch = fileName.toLowerCase().includes((searchTerm || '').toLowerCase());
+      const displayName = (file.title || file.name || file.originalName || file.filename || file.file?.originalName || file.file?.filename || '').toString();
+      const matchesSearch = displayName.toLowerCase().includes((searchTerm || '').toLowerCase());
       return matchesCategory && matchesSearch;
    });
 
-  const getIcon = (type?: string) => {
-     const t = (type || '').toString().toLowerCase();
-     if (t.includes('pdf')) return <FileText className="text-red-500" size={24} />;
-     if (t.includes('doc') || t.includes('word')) return <FileCode className="text-blue-500" size={24} />;
+  const getIcon = (fileItem: any) => {
+     const mime = (fileItem?.type || fileItem?.mimeType || fileItem?.file?.mimeType || '').toString().toLowerCase();
+     const filename = (fileItem?.filename || fileItem?.originalName || fileItem?.file?.filename || fileItem?.file?.originalName || '').toString().toLowerCase();
+     const ext = filename.split('.').pop() || '';
+     const t = mime || ext;
+     if (t.includes('pdf') || ext === 'pdf') return <FileText className="text-red-500" size={24} />;
+     if (t.includes('doc') || t.includes('word') || ['doc','docx'].includes(ext)) return <FileCode className="text-blue-500" size={24} />;
      return <File className="text-gray-500" size={24} />;
+  };
+
+  const getDisplayName = (fileItem: any) => {
+     return (fileItem?.title || fileItem?.name || fileItem?.originalName || fileItem?.filename || fileItem?.file?.originalName || fileItem?.file?.filename || 'Untitled Document').toString();
+  };
+
+  const getFileUrl = (fileItem: any) => {
+     // Prefer explicit URL fields, otherwise fallback to file.path or undefined
+     return fileItem?.url || fileItem?.file?.url || fileItem?.file?.path || fileItem?.file?.publicUrl || null;
   };
 
   return (
@@ -104,8 +116,8 @@ const Downloads: React.FC = () => {
                                   {getIcon(file.type)}
                                </div>
                                <div className="ml-4">
-                                  <div className="text-sm font-bold text-gray-900">{file.name}</div>
-                                  <div className="text-xs text-gray-500 md:hidden">{file.category} • {file.size}</div>
+                                  <div className="text-sm font-bold text-gray-900">{getDisplayName(file)}</div>
+                                  <div className="text-xs text-gray-500 md:hidden">{file.category} • {file.size || file.file?.size || '—'}</div>
                                </div>
                             </div>
                          </td>
@@ -118,9 +130,15 @@ const Downloads: React.FC = () => {
                             {file.date}
                          </td>
                          <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                            <button className="text-primary hover:text-secondary font-bold inline-flex items-center gap-2 transition-colors">
+                            {getFileUrl(file) ? (
+                              <a href={getFileUrl(file)} target="_blank" rel="noreferrer" className="text-primary hover:text-secondary font-bold inline-flex items-center gap-2 transition-colors">
                                Download <Download size={16} />
-                            </button>
+                              </a>
+                            ) : (
+                              <button disabled className="text-gray-400 font-bold inline-flex items-center gap-2 transition-colors cursor-not-allowed" title="No file URL available">
+                                Download <Download size={16} />
+                              </button>
+                            )}
                          </td>
                       </tr>
                    ))}

@@ -97,10 +97,11 @@ const Departments: React.FC = () => {
                   <h4 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-3">Key Programs</h4>
                   <div className="flex flex-wrap gap-2">
                     {dept.programs.slice(0, 3).map((program, idx) => {
-                      const programName = typeof program === 'string' ? program : (program as any).name || 'Program';
+                      const programName = typeof program === 'string' ? program : (program as any).title || (program as any).name || (program as any).code || 'Program';
+                      const shortName = (programName || '').toString().split(' ').slice(0, 2).join(' ');
                       return (
-                        <span key={`prog-${idx}-${programName}`} className="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-medium bg-gray-50 text-gray-700 border border-gray-100">
-                          {programName.split(' ').slice(0, 2).join(' ')}...
+                        <span key={`prog-${idx}-${shortName}`} className="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-medium bg-gray-50 text-gray-700 border border-gray-100">
+                          {shortName}...
                         </span>
                       );
                     })}

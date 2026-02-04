@@ -3,7 +3,8 @@ import React, { useState, useEffect } from 'react';
 import { getStaff } from '../services/api';
 import { StaffMember } from '../types';
 import Hero from '../components/Hero';
-import { Search, ArrowRight, Briefcase, GraduationCap, User } from 'lucide-react';
+import { Search, ArrowRight, Briefcase, User } from 'lucide-react';
+import { GraduationCap } from '../components/IconProxy';
 import { Link } from 'react-router-dom';
 
 const Staff: React.FC = () => {

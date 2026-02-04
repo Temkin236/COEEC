@@ -86,7 +86,7 @@ const DepartmentDetail: React.FC = () => {
                  <p>
                    We host state-of-the-art laboratories and maintain strong partnerships with leading technology firms. 
                    Students benefit from a blend of theoretical knowledge and practical application, ensuring they are job-ready upon graduation.
-                   The department is led by <strong>{department.head}</strong>, a distinguished scholar in the field.
+                   The department is led by <strong>{typeof department.head === 'string' ? department.head : (department.head?.displayName || department.head?.name || department.head?.title || '—')}</strong>, a distinguished scholar in the field.
                  </p>
               </div>
               
@@ -95,7 +95,7 @@ const DepartmentDetail: React.FC = () => {
                  <ul className="space-y-4">
                     <li className="flex justify-between border-b border-gray-200 pb-2">
                        <span className="text-gray-500">Department Head</span>
-                       <span className="font-semibold text-gray-900 text-right">{department.head}</span>
+                       <span className="font-semibold text-gray-900 text-right">{typeof department.head === 'string' ? department.head : (department.head?.displayName || department.head?.name || department.head?.title || '—')}</span>
                     </li>
                     <li className="flex justify-between border-b border-gray-200 pb-2">
                        <span className="text-gray-500">Established</span>
@@ -121,17 +121,20 @@ const DepartmentDetail: React.FC = () => {
             <h2 className="text-2xl font-serif font-bold text-gray-900 mb-10 text-center">Academic Programs</h2>
             
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-               {department.programs.map((program, idx) => (
-                 <div key={idx} className="bg-white p-8 rounded-lg shadow-sm hover:shadow-md transition-shadow border-t-4 border-primary">
-                    <h3 className="text-xl font-bold text-gray-900 mb-3">{program}</h3>
-                    <p className="text-gray-500 text-sm mb-6">
-                      A comprehensive program designed to equip students with foundational knowledge and advanced skills.
-                    </p>
-                    <Link to="/academics" className="text-primary font-bold text-sm flex items-center hover:text-secondary transition-colors">
-                      View Curriculum <ChevronRight size={16} />
-                    </Link>
-                 </div>
-               ))}
+                      {(department.programs || []).map((program, idx) => {
+                         const programName = typeof program === 'string' ? program : (program as any).title || (program as any).name || (program as any).code || 'Program';
+                         return (
+                         <div key={idx} className="bg-white p-8 rounded-lg shadow-sm hover:shadow-md transition-shadow border-t-4 border-primary">
+                              <h3 className="text-xl font-bold text-gray-900 mb-3">{programName}</h3>
+                              <p className="text-gray-500 text-sm mb-6">
+                                 A comprehensive program designed to equip students with foundational knowledge and advanced skills.
+                              </p>
+                              <Link to="/academics" className="text-primary font-bold text-sm flex items-center hover:text-secondary transition-colors">
+                                 View Curriculum <ChevronRight size={16} />
+                              </Link>
+                         </div>
+                         );
+                      })}
             </div>
          </div>
       </section>

@@ -68,12 +68,12 @@ const Home: React.FC = () => {
     <div className="overflow-x-hidden">
       {/* Unique Hero Section with Curve */}
       <section className="relative h-[600px] md:h-[700px] flex items-center bg-primary">
-        <div className="absolute inset-0 z-0">
-           <img 
-            src="/home.jpg" 
-            alt="University Building" 
-            className="w-full h-full object-cover opacity-70 mix-blend-overlay"
-           />
+          <div className="absolute inset-0 z-0">
+             <img 
+              src="/home.jpg" 
+              alt="University Building" 
+              className="w-full h-full object-cover opacity-70 mix-blend-overlay"
+              />
            <div className="absolute inset-0 bg-gradient-to-r from-primary via-primary/80 to-transparent"></div>
         </div>
 

@@ -3,7 +3,8 @@ import React, { useState, useEffect } from 'react';
 import { useParams, Link, Navigate } from 'react-router-dom';
 import { getStaffById } from '../services/api';
 import { StaffMember } from '../types';
-import { Home, ChevronRight, Mail, Phone, MapPin, Linkedin, Twitter, ExternalLink, FileText, Calendar, Award, Briefcase } from 'lucide-react';
+import { Home, ChevronRight, Mail, Phone, MapPin, Linkedin, Twitter, ExternalLink, FileText, Calendar, Award, Briefcase, Download, BookOpen } from 'lucide-react';
+import { GraduationCap } from '../components/IconProxy';
 
 const StaffProfile: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -26,6 +27,20 @@ const StaffProfile: React.FC = () => {
       </div>
     );
   }
+
+   if (!staff) {
+      return (
+         <div className="min-h-screen flex items-center justify-center">
+            <div className="text-center">
+               <h3 className="text-xl font-bold mb-2">Staff member not found</h3>
+               <p className="text-sm text-gray-500">The requested staff profile could not be loaded.</p>
+               <div className="mt-4">
+                  <Link to="/staff" className="text-primary font-bold">Back to directory</Link>
+               </div>
+            </div>
+         </div>
+      );
+   }
 
   return (
     <div className="bg-gray-50 min-h-screen font-sans">
@@ -82,7 +97,7 @@ const StaffProfile: React.FC = () => {
                        <GraduationCap className="text-secondary" size={18} />
                        <div>
                           <p className="text-xs text-gray-400 uppercase">Department</p>
-                          <p className="font-medium text-gray-900">{staff.department}</p>
+                          <p className="font-medium text-gray-900">{typeof staff.department === 'string' ? staff.department : (staff.department && (staff.department as any).name) || 'N/A'}</p>
                        </div>
                     </div>
                     <div className="flex items-center gap-3">
@@ -134,7 +149,7 @@ const StaffProfile: React.FC = () => {
                   
                   <div className="space-y-8 relative pl-6 border-l-2 border-gray-200">
                      {/* Experience */}
-                     {staff.experience.map((exp, idx) => (
+                     {(staff.experience || []).map((exp, idx) => (
                         <div key={idx} className="relative">
                            <div className="absolute -left-[31px] bg-white border-2 border-primary w-4 h-4 rounded-full"></div>
                            <h3 className="text-lg font-bold text-gray-900">{exp.role}</h3>
@@ -144,7 +159,7 @@ const StaffProfile: React.FC = () => {
                      ))}
                      
                      {/* Education */}
-                     {staff.education.map((edu, idx) => (
+                     {(staff.education || []).map((edu, idx) => (
                         <div key={idx} className="relative">
                            <div className="absolute -left-[31px] bg-white border-2 border-gray-400 w-4 h-4 rounded-full"></div>
                            <h3 className="text-lg font-bold text-gray-900">{edu.degree}</h3>
@@ -155,14 +170,14 @@ const StaffProfile: React.FC = () => {
                </section>
 
                {/* Research */}
-               {staff.publications.length > 0 && (
+               {(staff.publications && staff.publications.length > 0) && (
                   <section className="bg-white p-8 rounded-2xl shadow-sm border border-gray-200">
                      <h2 className="text-xl font-serif font-bold text-gray-900 mb-6 flex items-center gap-2">
                         <div className="w-1 h-6 bg-secondary rounded-full"></div>
                         Selected Publications
                      </h2>
                      <div className="space-y-4">
-                        {staff.publications.map((pub, idx) => (
+                        {(staff.publications || []).map((pub, idx) => (
                            <div key={idx} className="flex gap-4 items-start group">
                               <BookOpen className="text-gray-300 mt-1 flex-shrink-0 group-hover:text-primary transition-colors" size={20} />
                               <div>
@@ -185,7 +200,7 @@ const StaffProfile: React.FC = () => {
                <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-200">
                   <h3 className="font-bold text-gray-900 mb-4 text-sm uppercase tracking-wide">Areas of Expertise</h3>
                   <div className="flex flex-wrap gap-2">
-                     {staff.researchAreas.map((area, idx) => (
+                     {(staff.researchAreas || []).map((area, idx) => (
                         <span key={idx} className="bg-gray-100 text-gray-700 text-xs px-3 py-1.5 rounded-full font-medium">
                            {area}
                         </span>
@@ -218,13 +233,13 @@ const StaffProfile: React.FC = () => {
                )}
 
                {/* Upcoming Sessions / Events */}
-               {staff.events.length > 0 && (
+               {(staff.events && staff.events.length > 0) && (
                   <div className="bg-gradient-to-br from-primary to-blue-900 text-white p-6 rounded-2xl shadow-lg">
                      <h3 className="font-bold mb-4 text-sm uppercase tracking-wide opacity-80 flex items-center gap-2">
                         <Calendar size={14} /> Upcoming Sessions
                      </h3>
                      <div className="space-y-4">
-                        {staff.events.map((event, idx) => (
+                        {(staff.events || []).map((event, idx) => (
                            <div key={idx} className="bg-white/10 p-4 rounded-lg backdrop-blur-sm border border-white/10">
                               <div className="flex justify-between items-start mb-1">
                                  <span className="text-xs font-bold text-secondary bg-secondary/20 px-2 py-0.5 rounded">{event.role}</span>

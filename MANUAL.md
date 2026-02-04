@@ -38,3 +38,10 @@ curl -s "${VITE_API_BASE_URL:-https://coeec-dev-backend.onrender.com/api}/news/p
 - If network calls return 404/401, check the backend docs at `/api-docs` to confirm the public endpoints.
 
 If you want, I can run the dev server and confirm it starts successfully (requires permission to run commands). 
+
+9) Setting the landing hero image (the photo you provided)
+- Place the photo file you shared into the `public` folder at `public/home.jpg`.
+- Recommended image size: 1600x900 or larger, JPG or PNG. Filename must be `home.jpg` (or update `pages/Home.tsx` to match your filename).
+- After placing the file, reload the dev server page — the hero background will use `/home.jpg`.
+
+If you want, upload the `home.jpg` file here (or tell me the exact path) and I will add it into the project for you.
