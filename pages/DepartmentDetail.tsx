@@ -1,19 +1,36 @@
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, Link, Navigate } from 'react-router-dom';
-import { DEPARTMENTS, LATEST_NEWS } from '../constants';
+import { getDepartmentById, getNews } from '../services/api';
+import { Department, NewsItem } from '../types';
 import { Home, ChevronRight, ArrowUpRight, ChevronLeft, Calendar } from 'lucide-react';
 
 const DepartmentDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
-  const department = DEPARTMENTS.find(d => d.id === id);
+  const [department, setDepartment] = useState<Department | null>(null);
+  const [deptNews, setDeptNews] = useState<NewsItem[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  if (!department) {
-    return <Navigate to="/departments" replace />;
+  useEffect(() => {
+    if (id) {
+      Promise.all([
+        getDepartmentById(id),
+        getNews()
+      ]).then(([deptData, newsData]) => {
+        setDepartment(deptData);
+        setDeptNews(newsData.slice(0, 3));
+        setLoading(false);
+      }).catch(() => setLoading(false));
+    }
+  }, [id]);
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+      </div>
+    );
   }
-
-  // Use general news for now, in a real app this would be filtered by department
-  const deptNews = LATEST_NEWS.slice(0, 3);
 
   return (
     <div className="bg-gray-50 min-h-screen">

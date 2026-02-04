@@ -1,13 +1,13 @@
 
 import React, { useState, useEffect } from 'react';
-import { RESEARCH_PROJECTS } from '../constants';
 import { getResearchProjects } from '../services/api';
+import { ResearchProject } from '../types';
 import { FlaskConical, Microscope, FileText, ArrowRight } from 'lucide-react';
 import Hero from '../components/Hero';
 import { Link } from 'react-router-dom';
 
 const Research: React.FC = () => {
-  const [projects, setProjects] = useState(RESEARCH_PROJECTS);
+  const [projects, setProjects] = useState<ResearchProject[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {

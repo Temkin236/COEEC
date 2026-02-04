@@ -1,11 +1,22 @@
 
-import React from 'react';
-import { DEPARTMENTS } from '../constants';
+import React, { useState, useEffect } from 'react';
+import { getDepartments } from '../services/api';
+import { Department } from '../types';
 import { ChevronRight, Layers, Users, BookOpen, Microscope, ArrowUpRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import Hero from '../components/Hero';
 
 const Departments: React.FC = () => {
+  const [departments, setDepartments] = useState<Department[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    getDepartments().then(data => {
+      setDepartments(data);
+      setLoading(false);
+    }).catch(() => setLoading(false));
+  }, []);
+
   return (
     <div className="min-h-screen bg-gray-50 pb-20">
       <Hero
@@ -45,8 +56,13 @@ const Departments: React.FC = () => {
 
       {/* Departments Grid */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {loading ? (
+          <div className="flex justify-center items-center py-20">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+          </div>
+        ) : departments.length > 0 ? (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
-          {DEPARTMENTS.map((dept, index) => (
+          {departments.map((dept, index) => (
             <div key={dept.id} className="group bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 flex flex-col h-full">
               
               {/* Card Image */}
@@ -76,16 +92,21 @@ const Departments: React.FC = () => {
                 </p>
                 
                 {/* Programs Tags */}
+                {dept.programs && Array.isArray(dept.programs) && dept.programs.length > 0 && (
                 <div className="mb-8">
                   <h4 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-3">Key Programs</h4>
                   <div className="flex flex-wrap gap-2">
-                    {dept.programs.slice(0, 3).map(program => (
-                      <span key={program} className="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-medium bg-gray-50 text-gray-700 border border-gray-100">
-                         {program.split(' ').slice(0, 2).join(' ')}...
-                      </span>
-                    ))}
+                    {dept.programs.slice(0, 3).map((program, idx) => {
+                      const programName = typeof program === 'string' ? program : (program as any).name || 'Program';
+                      return (
+                        <span key={`prog-${idx}-${programName}`} className="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-medium bg-gray-50 text-gray-700 border border-gray-100">
+                          {programName.split(' ').slice(0, 2).join(' ')}...
+                        </span>
+                      );
+                    })}
                   </div>
                 </div>
+                )}
 
                 {/* Footer */}
                 <div className="mt-auto pt-6 border-t border-gray-100 flex items-center justify-between">
@@ -95,7 +116,13 @@ const Departments: React.FC = () => {
                       </div>
                       <div className="flex flex-col">
                          <span className="text-[10px] font-bold text-gray-400 uppercase">Head</span>
-                         <span className="text-xs font-bold text-gray-800">{dept.head}</span>
+                         <span className="text-xs font-bold text-gray-800">
+                           {typeof dept.head === 'string' 
+                             ? dept.head 
+                             : dept.head && typeof dept.head === 'object' && 'name' in dept.head
+                               ? (dept.head as any).name
+                               : 'N/A'}
+                         </span>
                       </div>
                    </div>
                    
@@ -110,6 +137,9 @@ const Departments: React.FC = () => {
             </div>
           ))}
         </div>
+        ) : (
+          <p className="text-center text-gray-500 py-10">No departments available at the moment.</p>
+        )}
       </div>
     </div>
   );

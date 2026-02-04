@@ -1,15 +1,30 @@
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, Link, Navigate } from 'react-router-dom';
-import { STAFF_MEMBERS } from '../constants';
-import { Mail, MapPin, Linkedin, Twitter, Download, Calendar, BookOpen, Briefcase, GraduationCap, ChevronRight, Home } from 'lucide-react';
+import { getStaffById } from '../services/api';
+import { StaffMember } from '../types';
+import { Home, ChevronRight, Mail, Phone, MapPin, Linkedin, Twitter, ExternalLink, FileText, Calendar, Award, Briefcase } from 'lucide-react';
 
 const StaffProfile: React.FC = () => {
   const { id } = useParams<{ id: string }>();
-  const staff = STAFF_MEMBERS.find(s => s.id === Number(id));
+  const [staff, setStaff] = useState<StaffMember | null>(null);
+  const [loading, setLoading] = useState(true);
 
-  if (!staff) {
-    return <Navigate to="/staff" replace />;
+  useEffect(() => {
+    if (id) {
+      getStaffById(id).then(data => {
+        setStaff(data);
+        setLoading(false);
+      }).catch(() => setLoading(false));
+    }
+  }, [id]);
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+      </div>
+    );
   }
 
   return (

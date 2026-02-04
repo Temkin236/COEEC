@@ -1,8 +1,10 @@
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { ArrowRight, Calendar, ArrowUpRight, PlusCircle, Clock, ChevronRight, ChevronLeft } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { LATEST_NEWS, IMPACT_STATS, QUICK_LINKS, UPCOMING_EVENTS, PARTNERS, DEPARTMENTS } from '../constants';
+import { QUICK_LINKS } from '../constants';
+import { getNews, getDepartments, getEvents, getMediaFiles, getStaff, getResearchProjects, getDownloads } from '../services/api';
+import { NewsItem, Department } from '../types';
 import * as LucideIcons from 'lucide-react';
 
 // Dynamic Icon Component
@@ -12,6 +14,56 @@ const Icon = ({ name, className }: { name: string; className?: string }) => {
 };
 
 const Home: React.FC = () => {
+  const [news, setNews] = useState<NewsItem[]>([]);
+  const [departments, setDepartments] = useState<Department[]>([]);
+  const [events, setEvents] = useState<any[]>([]);
+  const [partners, setPartners] = useState<any[]>([]);
+  const [impactStats, setImpactStats] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function load() {
+      try {
+        const [newsData, deptData, eventsData, mediaData, staffData, researchData, downloadsData] = await Promise.all([
+          getNews(),
+          getDepartments(),
+          getEvents(),
+          getMediaFiles(),
+          getStaff(),
+          getResearchProjects(),
+          getDownloads(),
+        ]);
+
+        setNews(Array.isArray(newsData) ? newsData.slice(0, 6) : []);
+        setDepartments(Array.isArray(deptData) ? deptData : []);
+        setEvents(Array.isArray(eventsData) ? eventsData : []);
+
+        // Build partners list from media if available, fallback to empty array
+        const partnersList = Array.isArray(mediaData) ? mediaData.filter((m: any) => m.type === 'image' || m.url).slice(0, 8) : [];
+        setPartners(partnersList);
+
+        // Impact stats: derive values from available endpoints where possible
+        const staffCount = Array.isArray(staffData) ? staffData.length : 0;
+        const researchCount = Array.isArray(researchData) ? researchData.length : 0;
+        const downloadsCount = Array.isArray(downloadsData) ? downloadsData.length : 0;
+
+        setImpactStats([
+          { label: 'Staff Members', value: staffCount || '—', icon: 'Users', description: 'Active staff and faculty' },
+          { label: 'Research Projects', value: researchCount || '—', icon: 'Search', description: 'Ongoing & completed projects' },
+          { label: 'Downloads', value: downloadsCount || '—', icon: 'FileText', description: 'Public resources available' },
+          { label: 'News Items', value: (Array.isArray(newsData) ? newsData.length : 0) || '—', icon: 'Calendar', description: 'Latest announcements and stories' },
+        ]);
+
+      } catch (err) {
+        console.error('[Home] load error', err);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    load();
+  }, []);
+
   return (
     <div className="overflow-x-hidden">
       {/* Unique Hero Section with Curve */}
@@ -69,7 +121,7 @@ const Home: React.FC = () => {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {IMPACT_STATS.map((stat, index) => (
+            {(impactStats.length ? impactStats : []).map((stat, index) => (
               <div key={index} className={`p-8 border border-gray-100 rounded-lg text-center hover:shadow-xl transition-shadow duration-300 group ${index === 0 ? 'bg-primary text-white border-none' : 'bg-white'}`}>
                 <div className={`mx-auto w-12 h-12 mb-6 flex items-center justify-center rounded-full ${index === 0 ? 'bg-white/20' : 'bg-gray-100 text-gray-500 group-hover:bg-primary group-hover:text-white transition-colors'}`}>
                   <Icon name={stat.icon} className="w-6 h-6" />
@@ -141,32 +193,37 @@ const Home: React.FC = () => {
             <div className="w-16 h-1 bg-secondary mx-auto"></div>
           </div>
 
+          {loading ? (
+            <div className="flex justify-center items-center py-20">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+            </div>
+          ) : news.length > 0 && news[0] ? (
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
             {/* Featured Article (Left) */}
             <div className="group cursor-pointer">
               <div className="overflow-hidden rounded-lg mb-6">
-                <img src={LATEST_NEWS[0].image} alt={LATEST_NEWS[0].title} className="w-full h-80 object-cover group-hover:scale-105 transition-transform duration-500" />
+                <img src={news[0].image} alt={news[0].title} className="w-full h-80 object-cover group-hover:scale-105 transition-transform duration-500" />
               </div>
               <h3 className="text-2xl font-serif font-bold text-gray-900 mb-3 group-hover:text-primary transition-colors">
-                <Link to={`/news/${LATEST_NEWS[0].id}`}>{LATEST_NEWS[0].title}</Link>
+                <Link to={`/news/${news[0].id}`}>{news[0].title}</Link>
               </h3>
-              <p className="text-gray-600 leading-relaxed mb-4">{LATEST_NEWS[0].excerpt}</p>
-              <div className="text-sm text-gray-400">{LATEST_NEWS[0].date}</div>
+              <p className="text-gray-600 leading-relaxed mb-4">{news[0].excerpt}</p>
+              <div className="text-sm text-gray-400">{news[0].date}</div>
             </div>
 
             {/* Side Articles (Right) */}
             <div className="space-y-8">
-              {LATEST_NEWS.slice(1).map((news) => (
-                <div key={news.id} className="flex gap-6 group cursor-pointer border-b border-gray-200 pb-8 last:border-0 last:pb-0">
+              {news.slice(1).map((newsItem) => (
+                <div key={newsItem.id} className="flex gap-6 group cursor-pointer border-b border-gray-200 pb-8 last:border-0 last:pb-0">
                   <div className="w-32 h-24 flex-shrink-0 overflow-hidden rounded-md">
-                    <img src={news.image} alt={news.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                    <img src={newsItem.image} alt={newsItem.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
                   </div>
                   <div>
                     <h4 className="text-lg font-bold text-gray-900 mb-2 group-hover:text-primary transition-colors line-clamp-2">
-                       <Link to={`/news/${news.id}`}>{news.title}</Link>
+                       <Link to={`/news/${newsItem.id}`}>{newsItem.title}</Link>
                     </h4>
-                    <p className="text-gray-500 text-sm line-clamp-2 mb-2">{news.excerpt}</p>
-                    <span className="text-xs text-gray-400">{news.date}</span>
+                    <p className="text-gray-500 text-sm line-clamp-2 mb-2">{newsItem.excerpt}</p>
+                    <span className="text-xs text-gray-400">{newsItem.date}</span>
                   </div>
                 </div>
               ))}
@@ -178,6 +235,9 @@ const Home: React.FC = () => {
               </div>
             </div>
           </div>
+          ) : (
+            <p className="text-center text-gray-500 py-10">No news available at the moment.</p>
+          )}
         </div>
       </section>
 
@@ -229,28 +289,48 @@ const Home: React.FC = () => {
               </Link>
            </div>
 
-           <div className="space-y-4">
-              {UPCOMING_EVENTS.map((event) => (
-                <div key={event.id} className="group flex items-center bg-gray-50 hover:bg-white border border-transparent hover:border-gray-200 hover:shadow-lg p-6 rounded-lg transition-all duration-300 cursor-pointer">
-                   <div className="bg-primary text-white p-4 rounded text-center min-w-[80px] group-hover:bg-secondary group-hover:text-primary transition-colors">
-                      <span className="block text-sm font-medium uppercase">{event.month}</span>
-                      <span className="block text-3xl font-bold">{event.day}</span>
-                   </div>
-                   <div className="ml-8 flex-grow">
-                      <h3 className="text-xl font-bold text-gray-900 mb-2 group-hover:text-primary transition-colors">{event.title}</h3>
-                      <div className="flex items-center text-sm text-gray-500">
-                         <Clock size={14} className="mr-2" />
-                         {event.time}
-                      </div>
-                   </div>
-                   <div className="hidden md:block">
-                      <div className="w-10 h-10 rounded-full border border-gray-300 flex items-center justify-center text-gray-400 group-hover:border-primary group-hover:text-primary transition-colors">
-                         <ArrowRight size={20} />
-                      </div>
-                   </div>
+            <div className="space-y-4">
+              {(events && events.length ? events.slice(0, 3) : []).map((event: any, idx: number) => {
+               // derive month/day/time from common fields
+               const dateStr = event.date || event.datetime || event.start_date || event.time || '';
+               let month = '';
+               let day = '';
+               let time = event.time || '';
+               if (dateStr) {
+                try {
+                  const d = new Date(dateStr);
+                  if (!isNaN(d.getTime())) {
+                   month = d.toLocaleString(undefined, { month: 'short' });
+                   day = (`0${d.getDate()}`).slice(-2);
+                   time = time || d.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' });
+                  }
+                } catch (e) {
+                  // ignore
+                }
+               }
+
+               return (
+                <div key={event.id || idx} className="group flex items-center bg-gray-50 hover:bg-white border border-transparent hover:border-gray-200 hover:shadow-lg p-6 rounded-lg transition-all duration-300 cursor-pointer">
+                  <div className="bg-primary text-white p-4 rounded text-center min-w-[80px] group-hover:bg-secondary group-hover:text-primary transition-colors">
+                    <span className="block text-sm font-medium uppercase">{month || event.month}</span>
+                    <span className="block text-3xl font-bold">{day || event.day || ''}</span>
+                  </div>
+                  <div className="ml-8 flex-grow">
+                    <h3 className="text-xl font-bold text-gray-900 mb-2 group-hover:text-primary transition-colors">{event.title || event.name}</h3>
+                    <div className="flex items-center text-sm text-gray-500">
+                      <Clock size={14} className="mr-2" />
+                      {time}
+                    </div>
+                  </div>
+                  <div className="hidden md:block">
+                    <div className="w-10 h-10 rounded-full border border-gray-300 flex items-center justify-center text-gray-400 group-hover:border-primary group-hover:text-primary transition-colors">
+                      <ArrowRight size={20} />
+                    </div>
+                  </div>
                 </div>
-              ))}
-           </div>
+               );
+              })}
+            </div>
         </div>
       </section>
 
@@ -261,11 +341,11 @@ const Home: React.FC = () => {
             <p className="text-gray-500 text-sm mb-12">If you are interested in becoming a partner, please feel free to contact us.</p>
             
             <div className="flex flex-wrap justify-center items-center gap-12 md:gap-24 opacity-70 grayscale hover:grayscale-0 transition-all duration-500">
-               {PARTNERS.map((partner, idx) => (
-                  <div key={idx} className="w-24 h-24 md:w-32 md:h-32 bg-white rounded-full flex items-center justify-center p-4 shadow-sm hover:scale-110 transition-transform">
-                     <img src={partner.logo} alt={partner.name} className="max-w-full max-h-full object-contain" />
-                  </div>
-               ))}
+              {(partners && partners.length ? partners : []).map((partner: any, idx: number) => (
+                <div key={idx} className="w-24 h-24 md:w-32 md:h-32 bg-white rounded-full flex items-center justify-center p-4 shadow-sm hover:scale-110 transition-transform">
+                  <img src={partner.logo || partner.url || partner.thumbnail || partner.file || ''} alt={partner.name || partner.title || `partner-${idx}`} className="max-w-full max-h-full object-contain" />
+                </div>
+              ))}
             </div>
 
             <div className="mt-16 flex justify-between items-center max-w-2xl mx-auto text-center">

@@ -1,32 +1,36 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Hero from '../components/Hero';
+import { getDownloads } from '../services/api';
 import { FileText, Download, Search, File, FileCode, Shield } from 'lucide-react';
 
 const Downloads: React.FC = () => {
   const [filter, setFilter] = useState('All');
   const [searchTerm, setSearchTerm] = useState('');
+  const [files, setFiles] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const categories = ['All', 'Forms', 'Policies', 'Templates', 'Manuals'];
+  useEffect(() => {
+    getDownloads().then(data => {
+      setFiles(data);
+      setLoading(false);
+    }).catch(() => setLoading(false));
+  }, []);
 
-  const files = [
-    { name: "Student Registration Form 2025", category: "Forms", size: "1.2 MB", date: "Aug 20, 2025", type: "pdf" },
-    { name: "Undergraduate Student Handbook", category: "Manuals", size: "3.5 MB", date: "Sept 01, 2025", type: "pdf" },
-    { name: "Research Grant Application Template", category: "Templates", size: "500 KB", date: "Oct 10, 2025", type: "doc" },
-    { name: "University Code of Conduct", category: "Policies", size: "800 KB", date: "Jan 15, 2025", type: "pdf" },
-    { name: "Thesis Submission Guidelines", category: "Manuals", size: "2.1 MB", date: "May 12, 2025", type: "pdf" },
-    { name: "Internship Request Letter", category: "Templates", size: "300 KB", date: "Jun 20, 2025", type: "doc" },
-  ];
+   const categories = ['All', ...Array.from(new Set(files.map((f: any) => (f && f.category) ? f.category : 'Uncategorized')))];
 
-  const filteredFiles = files.filter(file => {
-    const matchesCategory = filter === 'All' || file.category === filter;
-    const matchesSearch = file.name.toLowerCase().includes(searchTerm.toLowerCase());
-    return matchesCategory && matchesSearch;
-  });
+   const filteredFiles = files.filter(file => {
+      if (!file) return false;
+      const matchesCategory = filter === 'All' || (file.category === filter);
+      const fileName = (file.name || file.title || '').toString();
+      const matchesSearch = fileName.toLowerCase().includes((searchTerm || '').toLowerCase());
+      return matchesCategory && matchesSearch;
+   });
 
-  const getIcon = (type: string) => {
-     if (type === 'pdf') return <FileText className="text-red-500" size={24} />;
-     if (type === 'doc') return <FileCode className="text-blue-500" size={24} />;
+  const getIcon = (type?: string) => {
+     const t = (type || '').toString().toLowerCase();
+     if (t.includes('pdf')) return <FileText className="text-red-500" size={24} />;
+     if (t.includes('doc') || t.includes('word')) return <FileCode className="text-blue-500" size={24} />;
      return <File className="text-gray-500" size={24} />;
   };
 
@@ -75,7 +79,12 @@ const Downloads: React.FC = () => {
         </div>
 
         {/* File List */}
-        <div className="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden">
+        {loading ? (
+          <div className="flex justify-center items-center py-20">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+          </div>
+        ) : (
+          <div className="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden">
            {filteredFiles.length > 0 ? (
              <table className="min-w-full divide-y divide-gray-200">
                 <thead className="bg-gray-50">
@@ -124,7 +133,8 @@ const Downloads: React.FC = () => {
                 <p className="text-sm">Try adjusting your search or filter.</p>
              </div>
            )}
-        </div>
+          </div>
+        )}
       </div>
     </div>
   );

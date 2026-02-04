@@ -1,23 +1,50 @@
 
-import React, { useState } from 'react';
-import { STAFF_MEMBERS } from '../constants';
+import React, { useState, useEffect } from 'react';
+import { getStaff } from '../services/api';
+import { StaffMember } from '../types';
 import Hero from '../components/Hero';
 import { Search, ArrowRight, Briefcase, GraduationCap, User } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const Staff: React.FC = () => {
+  const [staffMembers, setStaffMembers] = useState<StaffMember[]>([]);
+  const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [filterDept, setFilterDept] = useState('All');
   const [filterRank, setFilterRank] = useState('All');
 
-  const departments = ['All', ...Array.from(new Set(STAFF_MEMBERS.map(s => s.department)))];
+  useEffect(() => {
+    getStaff().then(data => {
+      setStaffMembers(data);
+      setLoading(false);
+    }).catch(() => setLoading(false));
+  }, []);
+
+  // Extract department names from staff members (handle both string and object formats)
+  const departments = ['All', ...Array.from(new Set(
+    staffMembers.map(s => {
+      if (typeof s.department === 'string') return s.department;
+      if (s.department && typeof s.department === 'object' && 'name' in s.department) {
+        return (s.department as any).name;
+      }
+      return null;
+    }).filter(Boolean)
+  ))];
+  
   const ranks = ['All', 'Professor', 'Associate Professor', 'Assistant Professor', 'Lecturer', 'Administrator'];
 
-  const filteredStaff = STAFF_MEMBERS.filter(staff => {
-    const matchesSearch = staff.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
-                          staff.role.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                          staff.researchAreas.some(area => area.toLowerCase().includes(searchTerm.toLowerCase()));
-    const matchesDept = filterDept === 'All' || staff.department === filterDept;
+  const filteredStaff = staffMembers.filter(staff => {
+    // Get department name (handle both string and object)
+    const deptName = typeof staff.department === 'string' 
+      ? staff.department 
+      : staff.department && typeof staff.department === 'object' && 'name' in staff.department
+        ? (staff.department as any).name
+        : '';
+    
+    const matchesSearch = (staff.name?.toLowerCase() || '').includes(searchTerm.toLowerCase()) || 
+                          (staff.role?.toLowerCase() || '').includes(searchTerm.toLowerCase()) ||
+                          (staff.researchAreas || []).some(area => (area?.toLowerCase() || '').includes(searchTerm.toLowerCase()));
+    const matchesDept = filterDept === 'All' || deptName === filterDept;
     const matchesRank = filterRank === 'All' || staff.academicRank === filterRank;
     return matchesSearch && matchesDept && matchesRank;
   });
@@ -59,8 +86,8 @@ const Staff: React.FC = () => {
                       onChange={(e) => setFilterDept(e.target.value)}
                       className="w-full px-4 py-3 border border-gray-200 rounded-lg bg-white focus:outline-none focus:border-primary cursor-pointer text-sm text-gray-700"
                     >
-                      {departments.map(dept => (
-                        <option key={dept} value={dept}>{dept}</option>
+                      {departments.map((dept, idx) => (
+                        <option key={`dept-${idx}-${dept}`} value={dept}>{dept}</option>
                       ))}
                     </select>
                  </div>
@@ -88,6 +115,11 @@ const Staff: React.FC = () => {
         </div>
 
         {/* Staff Grid */}
+        {loading ? (
+          <div className="flex justify-center items-center py-20">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+          </div>
+        ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {filteredStaff.length > 0 ? (
             filteredStaff.map((staff) => (
@@ -125,11 +157,17 @@ const Staff: React.FC = () => {
                      </div>
                      <div className="flex items-start gap-2 text-xs text-gray-600">
                         <GraduationCap size={14} className="mt-0.5 text-gray-400" />
-                        <span>{staff.department}</span>
+                        <span>
+                          {typeof staff.department === 'string' 
+                            ? staff.department 
+                            : staff.department && typeof staff.department === 'object' && 'name' in staff.department
+                              ? (staff.department as any).name
+                              : 'N/A'}
+                        </span>
                      </div>
                   </div>
 
-                  {staff.researchAreas.length > 0 && (
+                  {staff.researchAreas && staff.researchAreas.length > 0 && (
                      <div className="mt-auto pt-4 border-t border-gray-100">
                         <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-2">Expertise</p>
                         <div className="flex flex-wrap gap-1">
@@ -160,8 +198,7 @@ const Staff: React.FC = () => {
                </button>
             </div>
           )}
-        </div>
-      </div>
+        </div>        )}      </div>
     </div>
   );
 };

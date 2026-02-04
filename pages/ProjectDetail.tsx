@@ -1,15 +1,30 @@
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, Link, Navigate } from 'react-router-dom';
-import { RESEARCH_PROJECTS } from '../constants';
-import { Home, ChevronRight, CheckCircle, Calendar, DollarSign, Users, Briefcase } from 'lucide-react';
+import { getResearchProjectById } from '../services/api';
+import { ResearchProject } from '../types';
+import { Home, ChevronRight, Calendar, User, CheckCircle2 } from 'lucide-react';
 
 const ProjectDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
-  const project = RESEARCH_PROJECTS.find(p => p.id === Number(id));
+  const [project, setProject] = useState<ResearchProject | null>(null);
+  const [loading, setLoading] = useState(true);
 
-  if (!project) {
-    return <Navigate to="/research" replace />;
+  useEffect(() => {
+    if (id) {
+      getResearchProjectById(id).then(data => {
+        setProject(data);
+        setLoading(false);
+      }).catch(() => setLoading(false));
+    }
+  }, [id]);
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+      </div>
+    );
   }
 
   return (

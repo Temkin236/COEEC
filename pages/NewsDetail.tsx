@@ -1,19 +1,44 @@
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, Link, Navigate } from 'react-router-dom';
-import { LATEST_NEWS } from '../constants';
+import { getNewsById, getNews } from '../services/api';
+import { NewsItem } from '../types';
 import { Calendar, User, ArrowLeft, Share2, Printer, Facebook, Twitter, Linkedin, Home, ChevronRight } from 'lucide-react';
 
 const NewsDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
-  const news = LATEST_NEWS.find(n => n.id === Number(id));
+  const [news, setNews] = useState<NewsItem | null>(null);
+  const [relatedNews, setRelatedNews] = useState<NewsItem[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (id) {
+      Promise.all([
+        getNewsById(id),
+        getNews()
+      ]).then(([newsData, allNews]) => {
+        setNews(newsData);
+        if (newsData) {
+          setRelatedNews(allNews.filter(n => n.id.toString() !== id).slice(0, 3));
+        }
+        setLoading(false);
+      }).catch(() => setLoading(false));
+    }
+  }, [id]);
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+      </div>
+    );
+  }
 
   if (!news) {
     return <Navigate to="/news" replace />;
   }
 
   // Get other news for sidebar (excluding current)
-  const relatedNews = LATEST_NEWS.filter(n => n.id !== news.id).slice(0, 3);
 
   return (
     <div className="bg-white min-h-screen">

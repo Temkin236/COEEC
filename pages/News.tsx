@@ -1,13 +1,13 @@
 
 import React, { useState, useEffect } from 'react';
 import Hero from '../components/Hero';
-import { LATEST_NEWS } from '../constants';
 import { getNews } from '../services/api';
+import { NewsItem } from '../types';
 import { Calendar, User, ArrowRight, ArrowUpRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const News: React.FC = () => {
-  const [news, setNews] = useState(LATEST_NEWS);
+  const [news, setNews] = useState<NewsItem[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -38,7 +38,13 @@ const News: React.FC = () => {
           </div>
         )}
         
-        {!loading && (
+        {!loading && news.length === 0 && (
+          <div className="text-center py-20">
+            <p className="text-gray-500 text-lg">No news available at the moment.</p>
+          </div>
+        )}
+        
+        {!loading && news.length > 0 && (
         <>
         {/* Bento Grid Layout */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 auto-rows-[minmax(300px,auto)] mb-16">
@@ -75,7 +81,7 @@ const News: React.FC = () => {
            </div>
 
            {/* Secondary Items */}
-           {secondaryNews.map((news) => (
+           {secondaryNews.length > 0 && secondaryNews.map((news) => (
              <div key={news.id} className="lg:col-span-1 lg:row-span-2 group relative rounded-3xl overflow-hidden shadow-md cursor-pointer bg-gray-100 flex flex-col">
                 <div className="h-48 lg:h-1/2 overflow-hidden relative">
                    <img 
