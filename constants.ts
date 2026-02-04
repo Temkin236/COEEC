@@ -35,8 +35,8 @@ export const NAV_ITEMS: NavItem[] = [
     label: 'Students',
     path: '/students',
     children: [
-      { label: 'Student Life', path: '/students' },
-      { label: 'Career Center', path: '/students' },
+        { label: 'Student Life', path: '/students' },
+        { label: 'Career Center', path: '/career' },
       { label: 'Download Center', path: '/downloads' },
     ]
   },

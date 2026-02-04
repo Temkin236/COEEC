@@ -23,6 +23,7 @@ import EventDetail from './pages/EventDetail';
 import Publications from './pages/Publications';
 import PublicationDetail from './pages/PublicationDetail';
 import ContactMessages from './pages/ContactMessages';
+import Career from './pages/Career';
 
 function App() {
   return (
@@ -41,6 +42,7 @@ function App() {
           <Route path="/publications/:id" element={<PublicationDetail />} />
           <Route path="/events" element={<Events />} />
           <Route path="/events/:id" element={<EventDetail />} />
+          <Route path="/career" element={<Career />} />
           <Route path="/contact-messages" element={<ContactMessages />} />
           <Route path="/academics" element={<Academics />} />
           <Route path="/students" element={<Students />} />
