@@ -61,12 +61,12 @@ const Departments: React.FC = () => {
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
           </div>
         ) : departments.length > 0 ? (
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-10 items-stretch auto-rows-fr">
           {departments.map((dept, index) => (
             <div key={dept.id} className="group bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 flex flex-col h-full">
               
               {/* Card Image */}
-              <Link to={`/departments/${dept.id}`} className="block h-40 md:h-56 lg:h-72 relative overflow-hidden">
+              <Link to={`/departments/${dept.id}`} className="block h-36 md:h-48 lg:h-56 relative overflow-hidden">
                 <img 
                   src={dept.image} 
                   alt={dept.name} 
@@ -81,20 +81,33 @@ const Departments: React.FC = () => {
               </Link>
 
               {/* Card Content */}
-              <div className="p-8 flex flex-col flex-grow">
+              <div className="p-6 flex flex-col h-full">
                 <h2 className="text-2xl font-serif font-bold text-gray-900 mb-3 group-hover:text-primary transition-colors leading-tight">
                   <Link to={`/departments/${dept.id}`}>
                     {dept.name}
                   </Link>
                 </h2>
-                <p className="text-gray-600 mb-6 leading-relaxed text-sm flex-grow">
-                  {dept.description}
-                </p>
+                <div className="text-gray-600 mb-3 leading-relaxed text-sm">
+                  <p
+                    style={{
+                      display: '-webkit-box',
+                      WebkitLineClamp: 4,
+                      WebkitBoxOrient: 'vertical',
+                      overflow: 'hidden'
+                    }}
+                    className="mb-2"
+                  >
+                    {dept.description}
+                  </p>
+                  <Link to={`/departments/${dept.id}`} className="text-xs font-semibold text-primary hover:underline">
+                    Read more
+                  </Link>
+                </div>
                 
                 {/* Programs Tags */}
                 {dept.programs && Array.isArray(dept.programs) && dept.programs.length > 0 && (
-                <div className="mb-8">
-                  <h4 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-3">Key Programs</h4>
+                <div className="mb-3">
+                  <h4 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Key Programs</h4>
                   <div className="flex flex-wrap gap-2">
                     {dept.programs.slice(0, 3).map((program, idx) => {
                       const programName = typeof program === 'string' ? program : (program as any).title || (program as any).name || (program as any).code || 'Program';
@@ -110,7 +123,7 @@ const Departments: React.FC = () => {
                 )}
 
                 {/* Footer */}
-                <div className="mt-auto pt-6 border-t border-gray-100 flex items-center justify-between">
+                <div className="pt-3 border-t border-gray-100 flex items-center justify-between">
                    <div className="flex items-center gap-3">
                       <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-400">
                         <Users size={14} />
