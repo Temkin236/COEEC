@@ -55,11 +55,13 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
         <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-20 md:h-24">
             {/* Logo Area */}
-            <Link to="/" className="flex-shrink-0 flex items-center gap-4 group">
-              <img src="/astu-logo.jpg" alt="Flag" className="h-10 md:h-12 w-auto"/>
-              <div className="flex flex-col">
-                <span className="font-bold text-2xl leading-none text-primary font-serif tracking-tight">COEEC</span>
-                <span className="text-xs text-gray-500 font-medium tracking-widest uppercase mt-1">College of Electrical Engineering</span>
+            <Link to="/" className="flex items-center gap-3 group min-w-0 max-w-[60%] sm:max-w-[60%] md:max-w-[60%]">
+              <img src="/astu-logo.jpg" alt="Flag" className="h-6 sm:h-8 md:h-10 w-auto flex-shrink-0"/>
+              <div className="flex flex-col min-w-0">
+                <span className="font-bold text-base sm:text-lg md:text-xl leading-none text-primary font-serif tracking-tight">COEEC</span>
+                <span className="max-w-[30px] text-[10px] sm:text-[11px] md:text-[12px] lg:text-[13px] text-gray-500 font-medium tracking-tight uppercase mt-1 leading-tight max-w-[420px] sm:max-w-[520px] md:max-w-[640px]">
+                  College of Electrical Engineering and Computing 
+                </span>
               </div>
             </Link>
 
