@@ -32,9 +32,9 @@ const Downloads: React.FC = () => {
      const filename = (fileItem?.filename || fileItem?.originalName || fileItem?.file?.filename || fileItem?.file?.originalName || '').toString().toLowerCase();
      const ext = filename.split('.').pop() || '';
      const t = mime || ext;
-     if (t.includes('pdf') || ext === 'pdf') return <FileText className="text-red-500" size={24} />;
-     if (t.includes('doc') || t.includes('word') || ['doc','docx'].includes(ext)) return <FileCode className="text-blue-500" size={24} />;
-     return <File className="text-gray-500" size={24} />;
+     if (t.includes('pdf') || ext === 'pdf') return <FileText className="text-red-500" size={20} />;
+     if (t.includes('doc') || t.includes('word') || ['doc','docx'].includes(ext)) return <FileCode className="text-blue-500" size={20} />;
+     return <File className="text-gray-500" size={20} />;
   };
 
   const getDisplayName = (fileItem: any) => {
@@ -45,6 +45,13 @@ const Downloads: React.FC = () => {
      // Prefer explicit URL fields, otherwise fallback to file.path or undefined
      return fileItem?.url || fileItem?.file?.url || fileItem?.file?.path || fileItem?.file?.publicUrl || null;
   };
+
+   const formatDate = (d: any) => {
+      if (!d) return '—';
+      const date = new Date(d);
+      if (isNaN(date.getTime())) return d;
+      return date.toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: '2-digit' });
+   };
 
   return (
     <div className="bg-white min-h-screen">
@@ -98,52 +105,86 @@ const Downloads: React.FC = () => {
         ) : (
           <div className="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden">
            {filteredFiles.length > 0 ? (
-             <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-gray-50">
-                   <tr>
-                      <th className="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">File Name</th>
-                      <th className="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider hidden md:table-cell">Category</th>
-                      <th className="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider hidden sm:table-cell">Updated</th>
-                      <th className="px-6 py-4 text-right text-xs font-bold text-gray-500 uppercase tracking-wider">Action</th>
-                   </tr>
-                </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
-                   {filteredFiles.map((file, idx) => (
-                      <tr key={idx} className="hover:bg-gray-50 transition-colors group">
-                         <td className="px-6 py-4 whitespace-nowrap">
-                            <div className="flex items-center">
-                               <div className="flex-shrink-0 h-10 w-10 flex items-center justify-center bg-gray-100 rounded-lg group-hover:bg-white transition-colors">
-                                  {getIcon(file.type)}
-                               </div>
-                               <div className="ml-4">
-                                  <div className="text-sm font-bold text-gray-900">{getDisplayName(file)}</div>
-                                  <div className="text-xs text-gray-500 md:hidden">{file.category} • {file.size || file.file?.size || '—'}</div>
-                               </div>
-                            </div>
-                         </td>
-                         <td className="px-6 py-4 whitespace-nowrap hidden md:table-cell">
-                            <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-50 text-blue-700">
-                               {file.category}
-                            </span>
-                         </td>
-                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 hidden sm:table-cell">
-                            {file.date}
-                         </td>
-                         <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                            {getFileUrl(file) ? (
-                              <a href={getFileUrl(file)} target="_blank" rel="noreferrer" className="text-primary hover:text-secondary font-bold inline-flex items-center gap-2 transition-colors">
-                               Download <Download size={16} />
-                              </a>
-                            ) : (
-                              <button disabled className="text-gray-400 font-bold inline-flex items-center gap-2 transition-colors cursor-not-allowed" title="No file URL available">
-                                Download <Download size={16} />
-                              </button>
-                            )}
-                         </td>
-                      </tr>
-                   ))}
-                </tbody>
-             </table>
+             <>
+               {/* Desktop / Table view */}
+               <div className="hidden md:block">
+                 <table className="min-w-full divide-y divide-gray-200">
+                    <thead className="bg-gray-50">
+                       <tr>
+                          <th className="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">File Name</th>
+                          <th className="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Category</th>
+                          <th className="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Updated</th>
+                          <th className="px-6 py-4 text-right text-xs font-bold text-gray-500 uppercase tracking-wider">Action</th>
+                       </tr>
+                    </thead>
+                    <tbody className="bg-white divide-y divide-gray-200">
+                       {filteredFiles.map((file, idx) => (
+                          <tr key={idx} className="hover:bg-gray-50 transition-colors group">
+                             <td className="px-6 py-4 whitespace-nowrap">
+                                <div className="flex items-center">
+                                   <div className="flex-shrink-0 h-12 w-12 flex items-center justify-center bg-white border border-gray-100 rounded-lg shadow-sm">
+                                      {getIcon(file)}
+                                   </div>
+                                   <div className="ml-4">
+                                      <div className="text-sm font-bold text-gray-900">{getDisplayName(file)}</div>
+                                      <div className="text-xs text-gray-500 hidden md:block">{file.size || file.file?.size || '—'}</div>
+                                   </div>
+                                </div>
+                             </td>
+                             <td className="px-6 py-4 whitespace-nowrap">
+                                <span className="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-50 text-blue-700">
+                                   {file.category || 'Uncategorized'}
+                                </span>
+                             </td>
+                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                {formatDate(file.date)}
+                             </td>
+                             <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                {getFileUrl(file) ? (
+                                  <a href={getFileUrl(file)} target="_blank" rel="noreferrer" className="text-primary hover:text-secondary font-bold inline-flex items-center gap-2 transition-colors">
+                                   Download <Download size={16} />
+                                  </a>
+                                ) : (
+                                  <button disabled className="text-gray-400 font-bold inline-flex items-center gap-2 transition-colors cursor-not-allowed" title="No file URL available">
+                                    Download <Download size={16} />
+                                  </button>
+                                )}
+                             </td>
+                          </tr>
+                       ))}
+                    </tbody>
+                 </table>
+               </div>
+
+               {/* Mobile / Card view */}
+               <div className="md:hidden divide-y divide-gray-100">
+                 {filteredFiles.map((file, idx) => (
+                   <div key={idx} className="p-4 flex items-center justify-between gap-4">
+                      <div className="flex items-center gap-3">
+                         <div className="h-12 w-12 flex items-center justify-center bg-white border border-gray-100 rounded-lg shadow-sm">
+                            {getIcon(file)}
+                         </div>
+                         <div>
+                            <div className="text-sm font-bold text-gray-900">{getDisplayName(file)}</div>
+                            <div className="text-xs text-gray-500">{file.category || 'Uncategorized'}</div>
+                         </div>
+                      </div>
+                      <div className="flex flex-col items-end gap-2">
+                         <div className="text-xs text-gray-500">{formatDate(file.date)}</div>
+                         {getFileUrl(file) ? (
+                           <a href={getFileUrl(file)} target="_blank" rel="noreferrer" className="text-primary font-bold inline-flex items-center gap-2">
+                             Download <Download size={16} />
+                           </a>
+                         ) : (
+                           <button disabled className="text-gray-400 font-bold inline-flex items-center gap-2 cursor-not-allowed">
+                             Download <Download size={16} />
+                           </button>
+                         )}
+                      </div>
+                   </div>
+                 ))}
+               </div>
+             </>
            ) : (
              <div className="p-12 text-center text-gray-500">
                 <Shield size={48} className="mx-auto mb-4 text-gray-300" />
