@@ -53,10 +53,10 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
       {/* Main Header */}
       <header className="sticky top-0 z-50 bg-white shadow-sm border-b border-gray-100">
         <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-24">
+          <div className="flex justify-between items-center h-20 md:h-24">
             {/* Logo Area */}
             <Link to="/" className="flex-shrink-0 flex items-center gap-4 group">
-              <img src="/astu-logo.jpg" alt="Flag" className="h-12 w-auto"/>
+              <img src="/astu-logo.jpg" alt="Flag" className="h-10 md:h-12 w-auto"/>
               <div className="flex flex-col">
                 <span className="font-bold text-2xl leading-none text-primary font-serif tracking-tight">COEEC</span>
                 <span className="text-xs text-gray-500 font-medium tracking-widest uppercase mt-1">College of Electrical Engineering</span>

@@ -67,7 +67,7 @@ const Home: React.FC = () => {
   return (
     <div className="overflow-x-hidden">
       {/* Unique Hero Section with Curve */}
-      <section className="relative h-[600px] md:h-[700px] flex items-center bg-primary">
+      <section className="relative h-[420px] md:h-[600px] lg:h-[700px] flex items-center bg-primary">
           <div className="absolute inset-0 z-0">
              <img 
               src="/home.jpg" 
@@ -95,10 +95,10 @@ const Home: React.FC = () => {
               COEEC provides an exceptional educational experience that prepares students for successful completion, employability, and job creation in the digital age.
             </p>
             <div className="flex flex-wrap gap-4">
-              <a href="https://estudent.astu.edu.et/" target="_blank" rel="noreferrer" className="bg-white text-primary font-bold px-8 py-3.5 rounded hover:bg-secondary hover:text-primary transition-colors flex items-center gap-2">
+              <a href="https://estudent.astu.edu.et/" target="_blank" rel="noreferrer" className="bg-white text-primary font-bold px-6 py-2.5 md:px-8 md:py-3.5 rounded hover:bg-secondary hover:text-primary transition-colors flex items-center gap-2">
                 Portal <ArrowUpRight size={18} />
               </a>
-              <Link to="/departments" className="border border-white text-white font-bold px-8 py-3.5 rounded hover:bg-white hover:text-primary transition-colors flex items-center gap-2">
+              <Link to="/departments" className="border border-white text-white font-bold px-6 py-2.5 md:px-8 md:py-3.5 rounded hover:bg-white hover:text-primary transition-colors flex items-center gap-2">
                 Study at COEEC <ArrowUpRight size={18} />
               </Link>
             </div>
@@ -202,7 +202,7 @@ const Home: React.FC = () => {
             {/* Featured Article (Left) */}
             <div className="group cursor-pointer">
               <div className="overflow-hidden rounded-lg mb-6">
-                <img src={news[0].image} alt={news[0].title} className="w-full h-80 object-cover group-hover:scale-105 transition-transform duration-500" />
+                <img src={news[0].image} alt={news[0].title} className="w-full h-56 md:h-80 object-cover group-hover:scale-105 transition-transform duration-500" />
               </div>
               <h3 className="text-2xl font-serif font-bold text-gray-900 mb-3 group-hover:text-primary transition-colors">
                 <Link to={`/news/${news[0].id}`}>{news[0].title}</Link>
@@ -215,7 +215,7 @@ const Home: React.FC = () => {
             <div className="space-y-8">
               {news.slice(1).map((newsItem) => (
                 <div key={newsItem.id} className="flex gap-6 group cursor-pointer border-b border-gray-200 pb-8 last:border-0 last:pb-0">
-                  <div className="w-32 h-24 flex-shrink-0 overflow-hidden rounded-md">
+                  <div className="w-24 h-20 md:w-32 md:h-24 flex-shrink-0 overflow-hidden rounded-md">
                     <img src={newsItem.image} alt={newsItem.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
                   </div>
                   <div>
@@ -264,9 +264,9 @@ const Home: React.FC = () => {
                     Explore this Campus <ArrowUpRight size={16} />
                   </Link>
                </div>
-               <div className="grid grid-cols-3 gap-4">
+                    <div className="grid grid-cols-3 gap-4">
                   {[1, 2, 3].map((i) => (
-                    <div key={i} className="rounded-lg overflow-hidden h-64 shadow-lg transform hover:-translate-y-2 transition-transform duration-300">
+                    <div key={i} className="rounded-lg overflow-hidden h-40 md:h-64 shadow-lg transform hover:-translate-y-2 transition-transform duration-300">
                        <img src={`https://picsum.photos/300/500?random=${120+i}`} alt="Campus" className="w-full h-full object-cover" />
                     </div>
                   ))}

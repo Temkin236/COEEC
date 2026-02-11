@@ -66,7 +66,7 @@ const Departments: React.FC = () => {
             <div key={dept.id} className="group bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 flex flex-col h-full">
               
               {/* Card Image */}
-              <Link to={`/departments/${dept.id}`} className="block h-56 relative overflow-hidden">
+              <Link to={`/departments/${dept.id}`} className="block h-40 md:h-56 lg:h-72 relative overflow-hidden">
                 <img 
                   src={dept.image} 
                   alt={dept.name} 

@@ -18,7 +18,7 @@ interface HeroProps {
 
 const Hero: React.FC<HeroProps> = ({ title, subtitle, image, breadcrumbs, parentSection }) => {
   return (
-    <div className="relative h-[350px] md:h-[450px] bg-primary">
+    <div className="relative h-[260px] md:h-[350px] lg:h-[450px] bg-primary">
         <img 
           src={image} 
           alt={title} 
@@ -48,7 +48,7 @@ const Hero: React.FC<HeroProps> = ({ title, subtitle, image, breadcrumbs, parent
              </span>
            )}
 
-           <h1 className="text-3xl md:text-5xl font-serif font-bold text-white mb-6 leading-tight max-w-4xl animate-fade-in-up delay-100">
+           <h1 className="text-2xl md:text-4xl lg:text-5xl font-serif font-bold text-white mb-6 leading-tight max-w-4xl animate-fade-in-up delay-100">
              {title}
            </h1>
 
