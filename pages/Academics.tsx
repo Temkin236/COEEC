@@ -32,12 +32,16 @@ const Academics: React.FC = () => {
               <p className="text-gray-600 mb-4">Advanced MSc and PhD programs focused on research and specialization.</p>
               <Link to="/departments" className="text-primary font-bold text-sm hover:underline">View Programs &rarr;</Link>
            </div>
-           <div className="bg-gray-50 p-8 rounded-xl border border-gray-100 hover:border-primary/20 transition-colors group">
+           <Link
+              to="/downloads"
+              aria-label="Open download center"
+              className="block bg-gray-50 p-8 rounded-xl border border-gray-100 hover:border-primary/20 transition-colors group"
+           >
               <Download className="w-10 h-10 text-primary mb-6 group-hover:scale-110 transition-transform" />
               <h3 className="text-xl font-bold text-gray-900 mb-3">Resources</h3>
               <p className="text-gray-600 mb-4">Access course catalogs, student handbooks, and academic policies.</p>
-              <Link to="/downloads" className="text-primary font-bold text-sm hover:underline">Go to Download Center &rarr;</Link>
-           </div>
+              <span className="text-primary font-bold text-sm hover:underline">Go to Download Center &rarr;</span>
+           </Link>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
@@ -97,7 +101,7 @@ const CalendarTable: React.FC = () => {
 
    useEffect(() => {
       let mounted = true;
-      getCalendarEvents(true).then(data => {
+      getCalendarEvents().then(data => {
          if (!mounted) return;
          setItems(Array.isArray(data) ? data : []);
          setLoading(false);

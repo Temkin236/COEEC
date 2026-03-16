@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { getDepartments } from '../services/api';
+import { getDepartments, getProgramTypes } from '../services/api';
 import { Department } from '../types';
 import { ChevronRight, Layers, Users, BookOpen, Microscope, ArrowUpRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -8,14 +8,24 @@ import Hero from '../components/Hero';
 
 const Departments: React.FC = () => {
   const [departments, setDepartments] = useState<Department[]>([]);
+  const [programTypes, setProgramTypes] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    getDepartments().then(data => {
-      setDepartments(data);
+    Promise.all([getDepartments(), getProgramTypes()]).then(([deptData, programTypesData]) => {
+      setDepartments(deptData);
+      setProgramTypes(Array.isArray(programTypesData) ? programTypesData : []);
       setLoading(false);
-    }).catch(() => setLoading(false));
+    }).catch(() => {
+      getDepartments().then((deptData) => {
+        setDepartments(deptData);
+        setLoading(false);
+      }).catch(() => setLoading(false));
+    });
   }, []);
+
+  const departmentProgramsCount = departments.reduce((total, dept) => total + (Array.isArray(dept.programs) ? dept.programs.length : 0), 0);
+  const totalPrograms = departmentProgramsCount > 0 ? departmentProgramsCount : programTypes.length;
 
   return (
     <div className="min-h-screen bg-gray-50 pb-20">
@@ -34,22 +44,22 @@ const Departments: React.FC = () => {
              <div className="w-12 h-12 bg-blue-50 text-primary rounded-full flex items-center justify-center mx-auto mb-4">
                 <Layers size={24} />
              </div>
-             <h3 className="text-3xl font-bold text-gray-900">3</h3>
+             <h3 className="text-3xl font-bold text-gray-900">{departments.length || 0}</h3>
              <p className="text-gray-500 text-sm font-medium uppercase tracking-wide mt-1">Specialized Depts</p>
           </div>
           <div className="p-4">
              <div className="w-12 h-12 bg-blue-50 text-primary rounded-full flex items-center justify-center mx-auto mb-4">
                 <BookOpen size={24} />
              </div>
-             <h3 className="text-3xl font-bold text-gray-900">12+</h3>
+             <h3 className="text-3xl font-bold text-gray-900">{totalPrograms}</h3>
              <p className="text-gray-500 text-sm font-medium uppercase tracking-wide mt-1">Degree Programs</p>
           </div>
           <div className="p-4">
              <div className="w-12 h-12 bg-blue-50 text-primary rounded-full flex items-center justify-center mx-auto mb-4">
                 <Microscope size={24} />
              </div>
-             <h3 className="text-3xl font-bold text-gray-900">18</h3>
-             <p className="text-gray-500 text-sm font-medium uppercase tracking-wide mt-1">Research Labs</p>
+             <h3 className="text-3xl font-bold text-gray-900">{departments.reduce((total, dept) => total + (dept.staffCount || 0), 0)}</h3>
+             <p className="text-gray-500 text-sm font-medium uppercase tracking-wide mt-1">Faculty & Staff</p>
           </div>
         </div>
       </div>
@@ -67,11 +77,17 @@ const Departments: React.FC = () => {
               
               {/* Card Image */}
               <Link to={`/departments/${dept.id}`} className="block h-36 md:h-48 lg:h-56 relative overflow-hidden">
-                <img 
-                  src={dept.image} 
-                  alt={dept.name} 
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" 
-                />
+                {dept.image ? (
+                  <img 
+                    src={dept.image} 
+                    alt={dept.name} 
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" 
+                  />
+                ) : (
+                  <div className="w-full h-full bg-gradient-to-br from-primary via-blue-900 to-slate-800 flex items-end p-6">
+                    <span className="text-white text-lg font-serif font-bold leading-tight">{dept.name}</span>
+                  </div>
+                )}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-60 group-hover:opacity-40 transition-opacity"></div>
                 <div className="absolute bottom-4 left-4">
                    <span className="bg-white/90 backdrop-blur-md text-primary text-xs font-bold px-3 py-1 rounded shadow-sm uppercase tracking-wide">
@@ -129,13 +145,9 @@ const Departments: React.FC = () => {
                         <Users size={14} />
                       </div>
                       <div className="flex flex-col">
-                         <span className="text-[10px] font-bold text-gray-400 uppercase">Head</span>
+                         <span className="text-[10px] font-bold text-gray-400 uppercase">Faculty & Staff</span>
                          <span className="text-xs font-bold text-gray-800">
-                           {typeof dept.head === 'string' 
-                             ? dept.head 
-                             : dept.head && typeof dept.head === 'object' && 'name' in dept.head
-                               ? (dept.head as any).name
-                               : 'N/A'}
+                           {dept.staffCount || 0}
                          </span>
                       </div>
                    </div>

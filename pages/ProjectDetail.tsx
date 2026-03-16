@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, Link, Navigate } from 'react-router-dom';
 import { getResearchProjectById } from '../services/api';
 import { ResearchProject } from '../types';
-import { Home, ChevronRight, Calendar, User, CheckCircle2, Users, DollarSign } from 'lucide-react';
+import { Home, ChevronRight, Calendar, Users, DollarSign, CheckCircle, Briefcase } from 'lucide-react';
 
 const ProjectDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -26,6 +26,10 @@ const ProjectDetail: React.FC = () => {
       </div>
     );
   }
+
+   if (!project) {
+      return <Navigate to="/research" replace />;
+   }
 
   return (
     <div className="bg-gray-50 min-h-screen">

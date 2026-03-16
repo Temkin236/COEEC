@@ -20,7 +20,7 @@ export const NAV_ITEMS: NavItem[] = [
     children: [
       { label: 'Departments', path: '/departments' },
       { label: 'Academic Calendar', path: '/academics' }, 
-      { label: 'Resources', path: '/academics' }, 
+      { label: 'Resources', path: '/downloads' }, 
     ]
   },
   {

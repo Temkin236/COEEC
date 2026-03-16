@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useParams, Link, Navigate } from 'react-router-dom';
-import { getDepartmentById, getNews } from '../services/api';
+import { getDepartmentById, getNews, getProgramTypes } from '../services/api';
 import { Department, NewsItem } from '../types';
 import { Home, ChevronRight, ArrowUpRight, ChevronLeft, Calendar } from 'lucide-react';
 
@@ -9,16 +9,19 @@ const DepartmentDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const [department, setDepartment] = useState<Department | null>(null);
   const [deptNews, setDeptNews] = useState<NewsItem[]>([]);
+   const [programTypes, setProgramTypes] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (id) {
       Promise.all([
         getDepartmentById(id),
-        getNews()
-      ]).then(([deptData, newsData]) => {
+            getNews(),
+            getProgramTypes(),
+         ]).then(([deptData, newsData, programTypesData]) => {
         setDepartment(deptData);
         setDeptNews(newsData.slice(0, 3));
+            setProgramTypes(Array.isArray(programTypesData) ? programTypesData : []);
         setLoading(false);
       }).catch(() => setLoading(false));
     }
@@ -32,15 +35,25 @@ const DepartmentDetail: React.FC = () => {
     );
   }
 
-  return (
+   if (!department) {
+      return <Navigate to="/departments" replace />;
+   }
+
+   const departmentPrograms = Array.isArray(department.programs) ? department.programs : [];
+   const fallbackProgramTypes = (programTypes || []).map((item) => item?.name || item?.title).filter(Boolean);
+   const displayedPrograms = departmentPrograms.length > 0 ? departmentPrograms : fallbackProgramTypes;
+
+   return (
     <div className="bg-gray-50 min-h-screen">
       {/* Hero Section */}
       <div className="relative h-[400px] md:h-[500px] bg-primary">
-        <img 
-          src={department.image} 
-          alt={department.name} 
-          className="absolute inset-0 w-full h-full object-cover opacity-30 mix-blend-multiply"
-        />
+            {department.image ? (
+               <img 
+                  src={department.image} 
+                  alt={department.name} 
+                  className="absolute inset-0 w-full h-full object-cover opacity-30 mix-blend-multiply"
+               />
+            ) : null}
         <div className="absolute inset-0 bg-gradient-to-r from-primary/90 via-primary/60 to-transparent"></div>
         
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full flex flex-col justify-center">
@@ -107,7 +120,7 @@ const DepartmentDetail: React.FC = () => {
                     </li>
                     <li className="flex justify-between pt-2">
                        <span className="text-gray-500">Faculty Members</span>
-                       <span className="font-semibold text-gray-900">45</span>
+                       <span className="font-semibold text-gray-900">{department.staffCount || 0}</span>
                     </li>
                  </ul>
               </div>
@@ -121,7 +134,7 @@ const DepartmentDetail: React.FC = () => {
             <h2 className="text-2xl font-serif font-bold text-gray-900 mb-10 text-center">Academic Programs</h2>
             
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                      {(department.programs || []).map((program, idx) => {
+                      {displayedPrograms.map((program, idx) => {
                          const programName = typeof program === 'string' ? program : (program as any).title || (program as any).name || (program as any).code || 'Program';
                          return (
                          <div key={idx} className="bg-white p-8 rounded-lg shadow-sm hover:shadow-md transition-shadow border-t-4 border-primary">
@@ -135,7 +148,12 @@ const DepartmentDetail: React.FC = () => {
                          </div>
                          );
                       })}
-            </div>
+                  </div>
+                  {displayedPrograms.length === 0 && (
+                     <div className="bg-white p-10 rounded-xl text-center text-gray-500 border border-gray-200">
+                        No academic programs are available for this department yet.
+                     </div>
+                  )}
          </div>
       </section>
 

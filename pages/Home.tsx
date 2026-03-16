@@ -1,10 +1,10 @@
 
 import React, { useState, useEffect } from 'react';
-import { ArrowRight, Calendar, ArrowUpRight, PlusCircle, Clock, ChevronRight, ChevronLeft } from 'lucide-react';
+import { ArrowRight, Calendar, ArrowUpRight, PlusCircle, Clock, ChevronRight, ChevronLeft, Download } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { QUICK_LINKS } from '../constants';
 import { getNews, getDepartments, getEvents, getMediaFiles, getStaff, getResearchProjects, getDownloads } from '../services/api';
-import { NewsItem, Department } from '../types';
+import { NewsItem, Department, ResearchProject } from '../types';
 import * as LucideIcons from 'lucide-react';
 
 // Dynamic Icon Component
@@ -17,6 +17,8 @@ const Home: React.FC = () => {
   const [news, setNews] = useState<NewsItem[]>([]);
   const [departments, setDepartments] = useState<Department[]>([]);
   const [events, setEvents] = useState<any[]>([]);
+  const [researchProjects, setResearchProjects] = useState<ResearchProject[]>([]);
+  const [downloadItems, setDownloadItems] = useState<any[]>([]);
   const [partners, setPartners] = useState<any[]>([]);
   const [impactStats, setImpactStats] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -30,13 +32,15 @@ const Home: React.FC = () => {
           getEvents(),
           getMediaFiles(),
           getStaff(),
-          getResearchProjects(),
-          getDownloads(),
+          getResearchProjects(1, 6),
+          getDownloads(1, 10),
         ]);
 
         setNews(Array.isArray(newsData) ? newsData.slice(0, 6) : []);
         setDepartments(Array.isArray(deptData) ? deptData : []);
         setEvents(Array.isArray(eventsData) ? eventsData : []);
+        setResearchProjects(Array.isArray(researchData) ? researchData.slice(0, 3) : []);
+        setDownloadItems(Array.isArray(downloadsData) ? downloadsData.slice(0, 5) : []);
 
         // Build partners list from media if available, fallback to empty array
         const partnersList = Array.isArray(mediaData) ? mediaData.filter((m: any) => m.type === 'image' || m.url).slice(0, 8) : [];
@@ -63,6 +67,21 @@ const Home: React.FC = () => {
 
     load();
   }, []);
+
+  const getDownloadName = (item: any) => {
+    return (item?.title || item?.name || item?.originalName || item?.filename || item?.file?.originalName || item?.file?.filename || 'Untitled Document').toString();
+  };
+
+  const getDownloadUrl = (item: any) => {
+    return item?.url || item?.file?.url || item?.file?.path || item?.file?.publicUrl || null;
+  };
+
+  const formatDate = (value: any) => {
+    if (!value) return 'Recent';
+    const date = new Date(value);
+    if (Number.isNaN(date.getTime())) return 'Recent';
+    return date.toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: '2-digit' });
+  };
 
   return (
     <div className="overflow-x-hidden">
@@ -131,7 +150,7 @@ const Home: React.FC = () => {
                 <p className={`text-xs leading-relaxed ${index === 0 ? 'text-blue-200' : 'text-gray-500'}`}>{stat.description}</p>
                 
                 {index === 0 && (
-                  <Link to="/students" className="mt-6 w-full bg-white text-primary font-bold py-2 rounded text-sm hover:bg-secondary transition-colors flex items-center justify-center gap-1">
+                  <Link to="/staff" className="mt-6 w-full bg-white text-primary font-bold py-2 rounded text-sm hover:bg-secondary transition-colors flex items-center justify-center gap-1">
                     View List <ArrowUpRight size={14} />
                   </Link>
                 )}
@@ -237,6 +256,88 @@ const Home: React.FC = () => {
           </div>
           ) : (
             <p className="text-center text-gray-500 py-10">No news available at the moment.</p>
+          )}
+        </div>
+      </section>
+
+      {/* Research Projects */}
+      <section className="py-24 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-end mb-12">
+            <div>
+              <p className="text-gray-500 text-sm font-medium mb-2">Research</p>
+              <h2 className="text-3xl font-serif font-bold text-gray-900">Featured Research Projects</h2>
+              <div className="w-16 h-1 bg-secondary mt-4"></div>
+            </div>
+            <Link to="/research" className="flex items-center text-sm font-bold text-gray-800 hover:text-primary transition-colors">
+              View all <ArrowUpRight size={16} className="ml-1" />
+            </Link>
+          </div>
+
+          {researchProjects.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {researchProjects.map((project) => (
+                <div key={project.id} className="group bg-white rounded-2xl border border-gray-100 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300">
+                  <div className="h-48 overflow-hidden bg-gray-100">
+                    <img
+                      src={project.image || 'https://picsum.photos/800/500?random=199'}
+                      alt={project.title}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
+                  </div>
+                  <div className="p-6">
+                    <p className="text-xs font-bold uppercase tracking-wide text-primary mb-2">{project.status || 'Project'}</p>
+                    <h3 className="text-lg font-serif font-bold text-gray-900 mb-3 line-clamp-2">
+                      <Link to={`/research/${project.id}`}>{project.title}</Link>
+                    </h3>
+                    <p className="text-sm text-gray-600 line-clamp-3 mb-4">{project.description || 'Research initiative at COEEC.'}</p>
+                    <Link to={`/research/${project.id}`} className="inline-flex items-center text-sm font-bold text-primary hover:text-secondary">
+                      View Project <ArrowRight size={14} className="ml-1" />
+                    </Link>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p className="text-center text-gray-500 py-10">No research projects available right now.</p>
+          )}
+        </div>
+      </section>
+
+      {/* Downloads */}
+      <section className="py-20 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-end mb-12">
+            <div>
+              <p className="text-gray-500 text-sm font-medium mb-2">Resources</p>
+              <h2 className="text-3xl font-serif font-bold text-gray-900">Latest Downloads</h2>
+              <div className="w-16 h-1 bg-secondary mt-4"></div>
+            </div>
+            <Link to="/downloads" className="flex items-center text-sm font-bold text-gray-800 hover:text-primary transition-colors">
+              View all <ArrowUpRight size={16} className="ml-1" />
+            </Link>
+          </div>
+
+          {downloadItems.length > 0 ? (
+            <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden shadow-sm">
+              {downloadItems.map((item, idx) => (
+                <div key={item.id || idx} className="flex flex-col md:flex-row md:items-center justify-between gap-4 p-5 border-b border-gray-100 last:border-b-0">
+                  <div className="min-w-0">
+                    <p className="text-base font-bold text-gray-900 truncate">{getDownloadName(item)}</p>
+                    <p className="text-xs text-gray-500 mt-1">{item.category || 'Uncategorized'} • {formatDate(item.date || item.updatedAt || item.createdAt)}</p>
+                  </div>
+                  {getDownloadUrl(item) ? (
+                    <a href={getDownloadUrl(item)} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 text-sm font-bold text-primary hover:text-secondary whitespace-nowrap">
+                      Download <Download size={16} />
+                    </a>
+                  ) : (
+                    <span className="inline-flex items-center gap-2 text-sm font-bold text-gray-400 whitespace-nowrap">Unavailable</span>
+                  )}
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p className="text-center text-gray-500 py-10">No download items available right now.</p>
           )}
         </div>
       </section>

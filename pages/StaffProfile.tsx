@@ -61,16 +61,20 @@ const StaffProfile: React.FC = () => {
            <div className="flex flex-col md:flex-row gap-8 md:gap-12 items-start">
               {/* Avatar */}
               <div className="w-32 h-32 md:w-48 md:h-48 flex-shrink-0 rounded-2xl overflow-hidden shadow-xl border-4 border-white relative bg-gray-200">
-                 <img src={staff.image} alt={staff.name} className="w-full h-full object-cover" />
+                         {staff.image ? (
+                            <img src={staff.image} alt={staff.name} className="w-full h-full object-cover" />
+                         ) : (
+                            <div className="w-full h-full flex items-center justify-center text-gray-400 text-sm font-medium">No Photo</div>
+                         )}
               </div>
 
               {/* Info */}
               <div className="flex-grow">
                  <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4">
                     <div>
-                       <span className="bg-blue-100 text-primary text-xs font-bold px-2 py-1 rounded uppercase tracking-wide">{staff.academicRank}</span>
+                       <span className="bg-blue-100 text-primary text-xs font-bold px-2 py-1 rounded uppercase tracking-wide">{staff.academicRank || 'Staff Member'}</span>
                        <h1 className="text-3xl md:text-4xl font-serif font-bold text-gray-900 mt-2">{staff.name}</h1>
-                       <p className="text-gray-500 text-lg">{staff.title}</p>
+                       <p className="text-gray-500 text-lg">{staff.title || staff.role}</p>
                     </div>
                     
                     <div className="flex gap-3">
@@ -90,7 +94,7 @@ const StaffProfile: React.FC = () => {
                        <Briefcase className="text-secondary" size={18} />
                        <div>
                           <p className="text-xs text-gray-400 uppercase">Role</p>
-                          <p className="font-medium text-gray-900">{staff.role}</p>
+                          <p className="font-medium text-gray-900">{staff.role || staff.title || 'Staff Member'}</p>
                        </div>
                     </div>
                     <div className="flex items-center gap-3">
@@ -136,7 +140,7 @@ const StaffProfile: React.FC = () => {
                      About
                   </h2>
                   <p className="text-gray-600 leading-relaxed text-lg">
-                     {staff.bio}
+                     {staff.bio || 'Biography not available yet.'}
                   </p>
                </section>
 

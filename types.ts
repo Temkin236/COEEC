@@ -6,7 +6,7 @@ export interface NavItem {
 }
 
 export interface NewsItem {
-  id: number;
+  id: number | string;
   title: string;
   date: string;
   category: string;
@@ -19,10 +19,12 @@ export interface NewsItem {
 export interface Department {
   id: string;
   name: string;
+  slug?: string;
   description: string;
-  head: string;
+  head: string | { id?: string; name?: string; displayName?: string; title?: string; [key: string]: any } | null;
   image: string;
-  programs: string[];
+  programs: Array<string | { id?: string; name?: string; title?: string; code?: string; [key: string]: any }>;
+  staffCount?: number;
 }
 
 export interface Education {
@@ -54,12 +56,12 @@ export interface Event {
 }
 
 export interface StaffMember {
-  id: number;
+  id: number | string;
   name: string;
   title: string; // e.g. PhD, MSc
   role: string; // e.g. Dean, Associate Professor
-  academicRank: 'Professor' | 'Associate Professor' | 'Assistant Professor' | 'Lecturer' | 'Administrator';
-  department: string;
+  academicRank: string;
+  department: string | { id?: string; name?: string; [key: string]: any };
   bio: string;
   email: string;
   phone?: string;

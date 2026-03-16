@@ -67,6 +67,9 @@ const News: React.FC = () => {
                  <p className="text-gray-300 mb-6 line-clamp-2 text-lg">
                     {featuredNews.excerpt}
                  </p>
+                 <Link to={`/news/${featuredNews.id}`} className="inline-flex items-center text-sm font-bold text-white hover:text-secondary transition-colors mb-6">
+                    View more <ArrowRight size={16} className="ml-2" />
+                 </Link>
                  <div className="flex items-center gap-4 text-sm text-gray-300">
                     <div className="flex items-center gap-1">
                        <Calendar size={14} /> {featuredNews.date}

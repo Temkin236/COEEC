@@ -32,7 +32,7 @@ const Staff: React.FC = () => {
     }).filter(Boolean)
   ))];
   
-  const ranks = ['All', 'Professor', 'Associate Professor', 'Assistant Professor', 'Lecturer', 'Administrator'];
+  const ranks = ['All', ...Array.from(new Set(staffMembers.map((staff) => staff.academicRank).filter(Boolean)))];
 
   const filteredStaff = staffMembers.filter(staff => {
     // Get department name (handle both string and object)
@@ -43,8 +43,10 @@ const Staff: React.FC = () => {
         : '';
     
     const matchesSearch = (staff.name?.toLowerCase() || '').includes(searchTerm.toLowerCase()) || 
-                          (staff.role?.toLowerCase() || '').includes(searchTerm.toLowerCase()) ||
-                          (staff.researchAreas || []).some(area => (area?.toLowerCase() || '').includes(searchTerm.toLowerCase()));
+                (staff.role?.toLowerCase() || '').includes(searchTerm.toLowerCase()) ||
+                (staff.title?.toLowerCase() || '').includes(searchTerm.toLowerCase()) ||
+                (staff.email?.toLowerCase() || '').includes(searchTerm.toLowerCase()) ||
+                (staff.researchAreas || []).some(area => (area?.toLowerCase() || '').includes(searchTerm.toLowerCase()));
     const matchesDept = filterDept === 'All' || deptName === filterDept;
     const matchesRank = filterRank === 'All' || staff.academicRank === filterRank;
     return matchesSearch && matchesDept && matchesRank;
@@ -144,17 +146,17 @@ const Staff: React.FC = () => {
                 {/* Content Section */}
                 <div className="p-6 flex flex-col flex-grow">
                   <div className="mb-4">
-                     <p className="text-xs font-bold text-primary uppercase tracking-wide mb-1">{staff.academicRank}</p>
+                     <p className="text-xs font-bold text-primary uppercase tracking-wide mb-1">{staff.academicRank || 'Staff Member'}</p>
                      <h3 className="text-lg font-serif font-bold text-gray-900 group-hover:text-primary transition-colors leading-tight">
                        <Link to={`/staff/${staff.id}`}>{staff.name}</Link>
                      </h3>
-                     <p className="text-sm text-gray-500 mt-1">{staff.title}</p>
+                     <p className="text-sm text-gray-500 mt-1">{staff.title || staff.role}</p>
                   </div>
 
                   <div className="space-y-3 mb-6">
                      <div className="flex items-start gap-2 text-xs text-gray-600">
                         <Briefcase size={14} className="mt-0.5 text-gray-400" />
-                        <span>{staff.role}</span>
+                        <span>{staff.role || staff.title || 'Staff Member'}</span>
                      </div>
                      <div className="flex items-start gap-2 text-xs text-gray-600">
                         <GraduationCap size={14} className="mt-0.5 text-gray-400" />
